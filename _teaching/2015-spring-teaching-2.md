@@ -1,5 +1,5 @@
 ---
-title: "Econometrics 2"
+title: "Econometrics II"
 collection: teaching
 type: "PhD Core Course"
 permalink: /teaching/econometricsii
