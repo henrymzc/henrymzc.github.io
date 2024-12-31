@@ -1,10 +1,10 @@
 ---
-title: "Teaching experience 2"
+title: "Econometrics 2"
 collection: teaching
-type: "Workshop"
-permalink: /teaching/2015-spring-teaching-1
-venue: "University 1, Department"
-date: 2015-01-01
+type: "PhD Core Course"
+permalink: /teaching/econometricsii
+venue: "Duke University, Department"
+date: 2023-01-10
 location: "City, Country"
 ---
 
