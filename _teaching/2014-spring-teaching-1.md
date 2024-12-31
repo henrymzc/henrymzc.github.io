@@ -1,10 +1,10 @@
 ---
 title: "Econometrics I"
 collection: teaching
-type: "Undergraduate course"
-permalink: /teaching/2014-spring-teaching-1
-venue: "University 1, Department"
-date: 2014-01-01
+type: "PhD Core course"
+permalink: /teaching/econometricsi
+venue: "Duke University, Department"
+date: 2022-09-01
 location: "City, Country"
 ---
 
