@@ -4,33 +4,243 @@ title: "Research"
 permalink: /research/
 author_profile: true
 ---
+<!--
+  RESEARCH / PUBLICATIONS PAGE — drop-in for AcademicPages (Jekyll + Minimal Mistakes)
+  ------------------------------------------------------------------------------------
+  HOW TO USE:
+    Option A (as a Jekyll page): copy this <style> block + everything inside
+      <div class="pubs"> ... </div> into _pages/publications.html, keeping the
+      front-matter (layout/title/permalink) that AcademicPages already has at the top.
+    Option B (standalone): just open this file directly, or rename to publications.html.
 
-{% if site.author.googlescholar %}
-  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
-{% endif %}
+  EDIT ONLY the content inside the <article class="paper"> blocks.
+  Duplicate a block to add a paper. Delete a block to remove one.
+  Everything is plain HTML/CSS + a tiny bit of JS for the abstract toggle — no build step.
+-->
+<style>
+  .pubs { max-width: 760px; margin: 0 auto; font-size: 1rem; line-height: 1.55; }
+  .pubs h2 {
+    font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #8a8a8a; font-weight: 600; margin: 2.6rem 0 1rem;
+    padding-bottom: 0.4rem; border-bottom: 1px solid #ececec;
+  }
+  .pubs h2:first-of-type { margin-top: 0.5rem; }
 
-{% include base_path %}
+  .paper { padding: 1.1rem 0; border-bottom: 1px solid #f2f2f2; }
+  .paper:last-child { border-bottom: none; }
 
-<!-- New style rendering if publication categories are defined -->
-{% if site.publication_category %}
-  {% for category in site.publication_category  %}
-    {% assign title_shown = false %}
-    {% for post in site.publications reversed %}
-      {% if post.category != category[0] %}
-        {% continue %}
-      {% endif %}
-      {% unless title_shown %}
-        <h2>{{ category[1].title }}</h2><hr />
-        {% assign title_shown = true %}
-      {% endunless %}
-      {% include archive-single.html %}
-    {% endfor %}
-  {% endfor %}
-{% else %}
-  {% for post in site.publications reversed %}
-    {% include archive-single.html %}
-  {% endfor %}
-{% endif %}
+  /* two-column layout: text on the left, figure on the right */
+  .paper-row { display: flex; gap: 1.4rem; align-items: flex-start; }
+  .paper-main { flex: 1 1 auto; min-width: 0; }        /* min-width:0 lets text wrap */
 
+  /* figure thumbnail — small by default, zooms on hover */
+  .paper-fig {
+    flex: 0 0 130px; width: 130px; margin-top: 0.2rem;
+    position: relative;
+  }
+  .paper-fig img {
+    width: 100%; height: auto; display: block;
+    border: 1px solid #e6e6e6; border-radius: 6px;
+    background: #fff; cursor: zoom-in;
+    transition: transform .25s ease, box-shadow .25s ease;
+    transform-origin: top right;   /* grow toward the left, stay inside the page */
+  }
+  .paper-fig img:hover {
+    transform: scale(3.2);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    border-color: #d0d0d0;
+    position: relative; z-index: 50;
+  }
 
+  @media (max-width: 640px) {
+    .paper-row { flex-direction: column; gap: 0.6rem; }
+    .paper-fig { flex-basis: auto; width: 200px; }
+    .paper-fig img { transform-origin: top left; }
+    .paper-fig img:hover { transform: scale(1.9); }
+  }
 
+  .paper .title {
+    font-weight: 650; font-size: 1.06rem; line-height: 1.35; color: #1a1a1a;
+    margin: 0 0 0.25rem;
+  }
+  .paper .authors { color: #444; margin: 0 0 0.15rem; }
+  .paper .authors .me { font-weight: 600; }        /* highlight your own name */
+  .paper .venue  { color: #666; font-style: italic; font-size: 0.95rem; margin: 0.15rem 0 0; }
+
+  /* topic keyword tags — one or many per paper, color-coded by field */
+  .tags { margin: 0.4rem 0 0; display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .tag {
+    display: inline-block; font-size: 0.74rem; font-weight: 600;
+    letter-spacing: 0.02em; padding: 0.14rem 0.6rem;
+    border-radius: 999px; white-space: nowrap;
+    background: #f0f3f8; color: #48566b;   /* default / fallback */
+  }
+  /* one color per research field — reuse the same class name everywhere
+     so a given topic always looks the same. Add your own below. */
+  .tag.immigration { background: #eaf2ff; color: #1d5fd0; }
+  .tag.education   { background: #eafaf0; color: #157a44; }
+  .tag.ai          { background: #f3ecff; color: #6b3fc0; }
+  .tag.labor       { background: #fff2e8; color: #c05a1a; }
+  .tag.health      { background: #ffecef; color: #c0324f; }
+  .tag.trade       { background: #e9f7f8; color: #167c8a; }
+  .tag.finance     { background: #fef6e0; color: #96700d; }
+  .tag.macro       { background: #eef0f4; color: #4a5568; }
+
+  /* single "JMP" marker kept for the job market paper title */
+  .status.jmp {
+    display: inline-block; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 0.12rem 0.5rem; border-radius: 4px; margin-left: 0.4rem;
+    vertical-align: 0.08em; white-space: nowrap;
+    background: #eef4ff; color: #1d4ed8;
+  }
+
+  /* JMP callout box — the one paper you want seen first */
+  .jmp-card {
+    background: #f8faff; border: 1px solid #e3ecff; border-radius: 10px;
+    padding: 1.15rem 1.25rem; margin-bottom: 0.5rem;
+  }
+  .jmp-card .paper { border: none; padding: 0; }
+
+  .links { margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .links a, .abstract-toggle {
+    font-size: 0.83rem; text-decoration: none; color: #2563eb;
+    border: 1px solid #dbe4f5; border-radius: 5px; padding: 0.2rem 0.6rem;
+    background: #fff; cursor: pointer; font-family: inherit; transition: background .15s;
+  }
+  .links a:hover, .abstract-toggle:hover { background: #f0f5ff; }
+
+  .abstract {
+    display: none; margin-top: 0.7rem; padding: 0.8rem 1rem;
+    background: #fafafa; border-left: 3px solid #d5ddec; border-radius: 0 6px 6px 0;
+    font-size: 0.92rem; color: #333; line-height: 1.6;
+  }
+  .abstract.open { display: block; }
+
+  @media (max-width: 480px) { .pubs { font-size: 0.95rem; } }
+</style>
+
+<div class="pubs">
+
+  <!-- ============ JOB MARKET PAPER ============ -->
+  <h2>Job Market Paper</h2>
+  <div class="jmp-card">
+    <article class="paper">
+     <div class="paper-row">
+      <div class="paper-main">
+      <p class="title">Your Job Market Paper Title Goes Here<span class="status jmp">JMP</span></p>
+      <p class="authors">Solo-authored</p>
+      <div class="tags">
+        <span class="tag immigration">Immigration</span>
+        <span class="tag labor">Labor</span>
+      </div>
+      <div class="links">
+        <button class="abstract-toggle" onclick="toggleAbs(this)">Abstract</button>
+        <a href="files/JMP.pdf">PDF</a>
+        <a href="files/JMP_slides.pdf">Slides</a>
+        <a href="#">SSRN</a>
+      </div>
+      <p class="abstract">
+        Paste your abstract here. Keep it to the version you'd submit to a journal —
+        one tight paragraph. Committees skim, so lead with the question and the headline
+        result in the first two sentences.
+      </p>
+      </div>
+      <div class="paper-fig">
+        <img src="files/fig_jmp.png" alt="Key figure from the job market paper">
+      </div>
+     </div>
+    </article>
+  </div>
+
+  <!-- ============ WORKING PAPERS ============ -->
+  <h2>Working Papers</h2>
+
+  <article class="paper">
+   <div class="paper-row">
+    <div class="paper-main">
+    <p class="title">A Working Paper Title</p>
+    <p class="authors"><span class="me">Henry M.</span> and Coauthor Name</p>
+    <p class="venue">R&amp;R, American Economic Journal: Applied Economics</p>
+    <div class="tags">
+      <span class="tag education">Education</span>
+      <span class="tag ai">AI</span>
+    </div>
+    <div class="links">
+      <button class="abstract-toggle" onclick="toggleAbs(this)">Abstract</button>
+      <a href="#">PDF</a>
+      <a href="#">SSRN</a>
+    </div>
+    <p class="abstract">Abstract text for this paper…</p>
+    </div>
+    <div class="paper-fig">
+      <img src="files/fig_paper1.png" alt="Key figure">
+    </div>
+   </div>
+  </article>
+
+  <article class="paper">
+   <div class="paper-row">
+    <div class="paper-main">
+    <p class="title">Another Working Paper Title</p>
+    <p class="authors"><span class="me">Henry M.</span>, Second Author, and Third Author</p>
+    <p class="venue">Under review</p>
+    <div class="tags">
+      <span class="tag immigration">Immigration</span>
+      <span class="tag education">Education</span>
+      <span class="tag ai">AI</span>
+    </div>
+    <div class="links">
+      <button class="abstract-toggle" onclick="toggleAbs(this)">Abstract</button>
+      <a href="#">PDF</a>
+    </div>
+    <p class="abstract">Abstract text for this paper…</p>
+    </div>
+    <div class="paper-fig">
+      <img src="files/fig_paper2.png" alt="Key figure">
+    </div>
+   </div>
+  </article>
+
+  <!-- ============ PUBLICATIONS ============ -->
+  <h2>Publications</h2>
+
+  <article class="paper">
+   <div class="paper-row">
+    <div class="paper-main">
+    <p class="title">A Published Paper Title</p>
+    <p class="authors"><span class="me">Henry M.</span> and Coauthor Name</p>
+    <p class="venue">Journal Name, 2025, Vol. 00(0), 000–000.</p>
+    <div class="tags">
+      <span class="tag labor">Labor</span>
+      <span class="tag immigration">Immigration</span>
+    </div>
+    <div class="links">
+      <button class="abstract-toggle" onclick="toggleAbs(this)">Abstract</button>
+      <a href="#">Published version</a>
+      <a href="#">Working paper version</a>
+      <a href="#">Replication</a>
+    </div>
+    <p class="abstract">Abstract text for this paper…</p>
+    </div>
+    <div class="paper-fig">
+      <img src="files/fig_pub1.png" alt="Key figure">
+    </div>
+   </div>
+  </article>
+
+  <!-- ============ WORK IN PROGRESS (title-only, optional) ============ -->
+  <h2>Work in Progress</h2>
+  <article class="paper">
+    <p class="title" style="font-weight:600;">A Project Title (with Coauthor)</p>
+  </article>
+
+</div>
+
+<script>
+  function toggleAbs(btn){
+    var abs = btn.closest('.paper').querySelector('.abstract');
+    if(abs){ abs.classList.toggle('open');
+      btn.textContent = abs.classList.contains('open') ? 'Hide abstract' : 'Abstract'; }
+  }
+</script>
