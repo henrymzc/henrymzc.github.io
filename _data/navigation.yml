@@ -21,7 +21,7 @@ main:
     url: /blog/
     
   - title: "CV"
-    url: /cv/
+  url: "https://www.dropbox.com/scl/fi/om9o0j7rpzizp2bpdj4sg/CV_Zhangchi_Ma.pdf?rlkey=o4jt9rio7fkbv85me1jibekpg&st=yuc0tcwf&dl=0"
     
   - title: "Guide"
     url: /markdown/
