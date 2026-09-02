@@ -203,11 +203,12 @@
   }
 
   .visible-links {
-    display: table;   // 必须保持 table:greedy-nav 的 JS 用 $vlinks.width()
-                      // 取内容宽度来判断是否溢出,flex 会让它恒等于容器宽度
+    display: table;   // Keep `table`: the greedy-nav JS reads $vlinks.width() as the
+                      // content width to detect overflow. With flex it would always
+                      // equal the container width, so every link gets hidden.
 
     @include breakpoint($large) {
-      margin-left: auto;   // 菜单整体靠右
+      margin-left: auto;   // push the menu to the right
     }
 
     li {
@@ -219,7 +220,7 @@
         text-wrap: wrap;
 
         @include breakpoint($large) {
-          position: absolute;   // 站点标题脱离表格流,固定在左端
+          position: absolute;   // take the site title out of the table flow, pin it left
           left: 0;
         }
 

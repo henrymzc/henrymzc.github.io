@@ -24,6 +24,26 @@ export PATH="/opt/homebrew/lib/ruby/gems/3.2.0/bin:$PATH"
 
 验证:`ruby -v` 应显示 `3.2.x`。若显示别的版本,检查 `.zshrc` 里有没有残留指向其他 Ruby 的 export(注意 conda 的 `(base)` 环境也可能抢 PATH)。
 
+**`_sass/*.scss` 里绝对不能写中文(包括注释)。**
+
+Cloudflare Pages 的构建容器 locale 是 US-ASCII,Ruby Sass 3.7.4 会按 ASCII 读 `.scss`,遇到中文的 UTF-8 字节直接报错:
+
+```
+Invalid US-ASCII character "\xE5" on line 206
+Conversion error: Jekyll::Converters::Scss encountered an error
+```
+
+本地 macOS 是 UTF-8 locale 所以照样能构建 —— **本地通过不代表线上通过**。SCSS 注释一律写英文。
+
+想在推之前复现线上环境:
+
+```bash
+LANG=C LC_ALL=C RUBYOPT="-EUS-ASCII" bundle exec jekyll build \
+  --config _config.yml,_config_cloudflare.yml
+```
+
+注意这只限制 `_sass/` 和 `assets/**/*.scss`。`_pages/*.html` 的 HTML 注释、页面内联 `<style>` 块不走 Sass 编译器,中文没问题。
+
 **本地预览:**
 ```bash
 cd henrymzc.github.io
