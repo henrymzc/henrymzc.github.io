@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EconQuest · Demo</title>
+<style>
+:root{
+  --ink:#20180f;
+  --ink-soft:#5a4c38;
+  --parch:#f3ead7;
+  --parch-deep:#e9dcc0;
+  --bg:#182420;
+  --bg-panel:#213029;
+  --gold:#c7973b;
+  --gold-bright:#e0b45c;
+  --seal:#b23a2c;
+  --leaf:#557a44;
+  --line:#d6c8a8;
+  --shadow:rgba(10,14,10,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  background-image:radial-gradient(ellipse at 50% -10%, #24352d 0%, var(--bg) 55%);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--parch);
+  display:flex;flex-direction:column;align-items:center;
+  min-height:100vh;
+}
+.serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif}
+
+/* ── top bar ── */
+#topbar{
+  width:100%;max-width:760px;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px 10px;
+  font-size:13px;letter-spacing:.06em;color:#bfd0be;
+}
+#topbar .brand{font-weight:700;color:var(--gold-bright);letter-spacing:.2em}
+#topbar .meta{display:flex;gap:18px}
+#topbar .meta b{color:var(--parch)}
+
+/* ── stage ── */
+#stage{width:100%;max-width:760px;padding:6px 16px 40px;flex:1}
+.card{
+  background:var(--parch);
+  color:var(--ink);
+  border-radius:6px;
+  box-shadow:0 12px 40px var(--shadow), inset 0 0 0 1px #fff8;
+  padding:30px 34px 28px;
+  position:relative;
+  animation:cardIn .45s cubic-bezier(.2,.9,.3,1);
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card::before{
+  content:"";position:absolute;inset:8px;border:1px solid var(--line);
+  border-radius:3px;pointer-events:none;
+}
+.eyebrow{font-size:11px;letter-spacing:.26em;color:var(--seal);font-weight:700;margin-bottom:10px}
+h1{font-size:40px;letter-spacing:.04em;margin:6px 0 4px;color:var(--ink)}
+h2{font-size:24px;letter-spacing:.02em;margin-bottom:4px}
+h3{font-size:16px;margin:16px 0 6px;color:var(--ink)}
+p{line-height:1.75;color:var(--ink);font-size:15px}
+.dim{color:var(--ink-soft);font-size:13.5px;line-height:1.75}
+
+/* ── npc dialogue ── */
+.npc-row{display:flex;gap:16px;align-items:flex-start;margin:14px 0 18px}
+.avatar{
+  width:52px;height:52px;flex:0 0 52px;border-radius:50%;
+  background:var(--bg-panel);color:var(--gold-bright);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;border:2px solid var(--gold);
+}
+.bubble{
+  background:#fffdf6;border:1px solid var(--line);border-radius:4px;
+  padding:14px 18px;flex:1;position:relative;
+}
+.bubble::before{
+  content:"";position:absolute;left:-7px;top:18px;width:12px;height:12px;
+  background:#fffdf6;border-left:1px solid var(--line);border-bottom:1px solid var(--line);
+  transform:rotate(45deg);
+}
+.npc-name{font-size:12px;letter-spacing:.12em;color:var(--seal);font-weight:700;margin-bottom:4px}
+.bubble p{font-size:15px}
+
+/* ── anim frame ── */
+.animbox{
+  background:#fbf6e9;border:1px solid var(--line);border-radius:4px;
+  padding:12px;margin:6px 0 16px;display:flex;justify-content:center;
+}
+.animbox svg{max-width:100%;height:auto}
+.anim-cap{font-size:11.5px;color:var(--ink-soft);text-align:center;margin:-10px 0 16px;letter-spacing:.03em}
+
+/* ── formula shortcut ── */
+details.formula{
+  border:1px dashed var(--gold);border-radius:4px;background:#fdf8ec;
+  margin:0 0 18px;padding:0;
+}
+details.formula summary{
+  cursor:pointer;padding:10px 16px;font-size:13px;font-weight:700;color:#8a6516;
+  letter-spacing:.08em;list-style:none;user-select:none;
+}
+details.formula summary::before{content:"⚡ ";}
+details.formula[open] summary{border-bottom:1px dashed var(--gold)}
+details.formula .fbody{padding:12px 18px 14px}
+.expr{
+  font-family:"Courier New",monospace;font-size:16px;font-weight:700;
+  color:var(--seal);margin:4px 0 8px;letter-spacing:.02em;
+}
+
+/* ── controls ── */
+.ctl{margin:18px 0}
+.ctl-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:12px}
+.ctl-label{font-size:14px;font-weight:700;letter-spacing:.03em}
+.ctl-val{font-family:"Courier New",monospace;font-size:20px;font-weight:700;color:var(--seal);text-align:right;white-space:nowrap}
+.ctl-val small{font-size:12px;color:var(--ink-soft);font-family:inherit}
+input[type=range]{
+  -webkit-appearance:none;width:100%;height:6px;border-radius:3px;
+  background:linear-gradient(90deg,var(--gold) var(--pct,50%),var(--parch-deep) var(--pct,50%));
+  outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+  background:var(--ink);border:3px solid var(--gold-bright);cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,.3);
+}
+input[type=range]::-moz-range-thumb{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--ink);border:3px solid var(--gold-bright);cursor:pointer;
+}
+.ctl-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);margin-top:4px}
+.badge{
+  display:inline-block;background:var(--bg-panel);color:var(--gold-bright);
+  font-size:12.5px;padding:4px 12px;border-radius:3px;letter-spacing:.04em;margin:2px 6px 10px 0;
+}
+.badge.warn{background:var(--seal);color:#fff}
+
+/* ── intel panel ── */
+.intel{
+  background:#fffdf6;border:1px solid var(--line);border-left:4px solid var(--gold);
+  border-radius:4px;padding:14px 18px;margin:14px 0 4px;
+}
+.intel-title{font-size:11.5px;letter-spacing:.18em;color:#8a6516;font-weight:700;margin-bottom:8px}
+.intel-row{font-size:14px;margin:6px 0;color:var(--ink);line-height:1.65}
+.intel-row b{font-family:"Courier New",monospace;font-size:17px;color:var(--seal)}
+.intel-note{font-size:12px;color:var(--ink-soft);margin-top:8px;line-height:1.65;border-top:1px dashed var(--line);padding-top:8px}
+.itable{border-collapse:collapse;margin:6px 0;font-size:12.5px}
+.itable td,.itable th{border:1px solid var(--line);padding:4px 9px;text-align:center;font-family:"Courier New",monospace}
+.itable th{background:var(--parch-deep);font-family:inherit;font-weight:700}
+
+/* ── buttons ── */
+.btnrow{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+button.main,button.ghost{
+  font-family:inherit;font-size:15px;letter-spacing:.06em;font-weight:700;
+  padding:13px 26px;border-radius:3px;cursor:pointer;transition:transform .12s, box-shadow .12s;
+}
+button.main{
+  background:var(--ink);color:var(--gold-bright);border:1px solid var(--gold);
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+}
+button.main:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.3)}
+button.ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
+button.ghost:hover{border-color:var(--ink-soft)}
+
+/* ── ledger feedback ── */
+.ledger{
+  background:#fffdf6;border:1px solid var(--line);border-radius:4px;
+  padding:20px 22px 16px;margin:14px 0 6px;position:relative;overflow:hidden;
+}
+.ledger-title{
+  font-size:11.5px;letter-spacing:.2em;color:var(--ink-soft);font-weight:700;
+  border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px;
+  padding-right:78px;text-transform:uppercase;
+}
+.lrow{margin-bottom:14px}
+.ledger-title + .lrow .lrow-head{padding-right:74px}
+.lrow-head{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px;gap:12px}
+.lrow-head .k{font-weight:700;letter-spacing:.02em}
+.lrow-head .v{font-family:"Courier New",monospace;font-weight:700;text-align:right;white-space:nowrap}
+.v .opt{color:var(--ink-soft);font-weight:400;font-size:12.5px}
+.bars{position:relative;height:14px;background:var(--parch-deep);border-radius:2px;overflow:hidden}
+.bar-opt{position:absolute;inset:0;background:repeating-linear-gradient(45deg,#d8c795 0 6px,#e4d6ac 6px 12px);width:0;transition:width .8s ease}
+.bar-you{position:absolute;inset:0;background:var(--leaf);width:0;transition:width 1.1s cubic-bezier(.2,.8,.3,1)}
+.bar-you.over{background:var(--seal)}
+.hintline{
+  font-size:13.5px;color:var(--seal);margin-top:12px;line-height:1.65;
+  border-top:1px dashed var(--line);padding-top:12px;
+}
+.stamp{
+  position:absolute;right:18px;top:14px;width:64px;height:64px;border-radius:50%;
+  border:3px solid var(--seal);color:var(--seal);display:flex;align-items:center;justify-content:center;
+  font-size:30px;font-weight:700;font-family:"Iowan Old Style",Georgia,serif;
+  transform:rotate(-12deg) scale(0);opacity:.88;
+  animation:stampIn .5s .9s cubic-bezier(.3,1.6,.4,1) forwards;
+  background:radial-gradient(circle,#b23a2c11 60%, transparent 62%);
+}
+@keyframes stampIn{to{transform:rotate(-12deg) scale(1)}}
+.stamp.good{border-color:var(--leaf);color:var(--leaf)}
+.stamp.mid{border-color:var(--gold);color:#8a6516}
+
+.whybtn{
+  background:none;border:none;color:var(--seal);font-size:13px;cursor:pointer;
+  text-decoration:underline dotted;letter-spacing:.02em;padding:0;font-family:inherit;
+  margin-top:10px;
+}
+.whybox{display:none;margin-top:10px;font-size:13.5px;color:var(--ink-soft);line-height:1.7;
+  background:#fdf8ec;border:1px dashed var(--gold);border-radius:3px;padding:12px 14px}
+.whybox.show{display:block}
+
+/* ── collapse / negotiation ── */
+.card.crisis{background:#f0dcd2}
+.card.crisis::before{border-color:#c9a08f}
+.crisis .eyebrow{color:var(--seal)}
+.resp{display:flex;gap:12px;align-items:center;margin:10px 0;font-size:14px}
+.resp .avatar{width:40px;height:40px;flex-basis:40px;font-size:15px}
+.resp .say{background:#fffdf6;border:1px solid var(--line);border-radius:4px;padding:8px 14px;flex:1}
+.ok{color:var(--leaf);font-weight:700}
+.no{color:var(--seal);font-weight:700}
+
+.qtable{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+.qtable th,.qtable td{border:1px solid var(--line);padding:8px 10px;text-align:center}
+.qtable th{background:var(--parch-deep);letter-spacing:.04em}
+.qtable td.me{font-weight:700;color:var(--seal)}
+
+.progress-dots{display:flex;gap:6px;margin:4px 0 14px}
+.pdot{width:8px;height:8px;border-radius:50%;background:var(--parch-deep);border:1px solid var(--line)}
+.pdot.done{background:var(--leaf);border-color:var(--leaf)}
+.pdot.cur{background:var(--gold);border-color:var(--gold);transform:scale(1.3)}
+
+/* ── svg anims ── */
+@keyframes fadeOutUp{0%,35%{opacity:1;transform:none}60%,100%{opacity:0;transform:translateY(-10px)}}
+@keyframes priceRise{0%,15%{transform:translateY(0)}70%,100%{transform:translateY(-46px)}}
+@keyframes shrink{from{transform:scale(1)}to{transform:scale(.45)}}
+@keyframes popIn{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+@keyframes rollHill{0%{transform:translate(0,0)}100%{transform:translate(78px,-44px)}}
+@keyframes walkRight{0%,20%{transform:translateX(0);opacity:1}80%,100%{transform:translateX(72px);opacity:1}}
+@keyframes tipScale{0%,25%{transform:rotate(0)}60%,100%{transform:rotate(-7deg)}}
+@keyframes swim{0%{transform:translateX(0)}50%{transform:translateX(14px)}100%{transform:translateX(0)}}
+@keyframes fadeAway{0%,40%{opacity:1}90%,100%{opacity:0}}
+@keyframes blinkCell{0%,45%{opacity:0}65%,100%{opacity:1}}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+@keyframes barDown{0%,20%{height:52px;y:38px}90%,100%{height:14px;y:76px}}
+@keyframes growBack{0%,30%{width:30px}90%,100%{width:110px}}
+.aa{animation-duration:3.4s;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
+@media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+
+@media (max-width:560px){
+  .card{padding:22px 18px 22px}
+  h1{font-size:30px}
+  .stamp{width:52px;height:52px;font-size:24px;right:12px;top:10px}
+  .ledger-title{padding-right:62px}
+}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div class="brand serif" onclick="screenTitle()" style="cursor:pointer" title="Back to level select">ECONQUEST</div>
+  <div class="meta" id="topmeta"></div>
+</div>
+<div id="stage"></div>
+
+<script>
+/* ═══════════════════ DATA & MODEL ═══════════════════ */
+
+const OUT=[0,4,8,11,14,16,18,19,20,20,20];           // workers → output (diminishing returns)
+const WTP=[27,25,24,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6]; // buyers' willingness to pay
+const demand=P=>WTP.filter(w=>w>=P).length;
+
+const L1CFG=[
+ {cap:12},{cap:15},
+ {workers:1},{workers:1},{workers:1},{workers:1},
+ {workers:1,comp:12},{workers:1,comp:10}
+];
+function simL1(r,P,W){
+  const c=L1CFG[r-1];
+  P=Math.max(5,Math.min(28,P));W=Math.max(0,Math.min(10,W||0));
+  let d=demand(P);
+  if(c.comp&&P>c.comp)d=Math.floor(d*0.15);
+  const cap=c.workers?OUT[W]:c.cap;
+  const sold=Math.min(d,cap);
+  const profit=c.workers? sold*P-2*sold-8*W : sold*(P-4);
+  return{sold,profit,cap,d};
+}
+function optL1(r){
+  const c=L1CFG[r-1];let best={profit:-1e9};
+  for(let P=5;P<=28;P++){
+    if(c.workers){for(let W=0;W<=10;W++){const s=simL1(r,P,W);if(s.profit>best.profit)best={...s,P,W}}}
+    else{const s=simL1(r,P,0);if(s.profit>best.profit)best={...s,P,W:0}}
+  }
+  return best;
+}
+
+const EFF=[1,.93,.86,.79], SAT=[82,68,55,43];
+function simL2A(r,F){
+  const e=EFF[r-1];
+  const g=1.2*F*e, c=.5*(100-F)*e;
+  let w=Math.round(100*Math.min(g/90,c/12));
+  w-=Math.round(.15*(Math.max(0,g-90)+3*Math.max(0,c-12)));
+  return{g:+g.toFixed(1),c:+c.toFixed(1),welfare:Math.max(0,Math.min(100,w))};
+}
+function optL2A(r){let b={welfare:-1};for(let F=0;F<=100;F++){const s=simL2A(r,F);if(s.welfare>b.welfare)b={...s,F}}return b}
+
+function simL2B(r,p,T){
+  T=T||0;
+  const s=Math.min(.7,Math.max(.02,.25*Math.pow(p/2.4,2)));
+  const Ww=100*s;
+  let g=1.2*(100-Ww), c=.5*Ww;
+  const Dc=12*Math.pow(2.4/p,.8);
+  g-=1.6*T; c+=T;
+  const sg=g-90, sc=c-Dc;
+  let w=100-1.0*Math.abs(sg)-4*Math.abs(sc);
+  if(r>=7&&sc>=-1) w+=.8*T;                 // gains from trade
+  w=Math.max(0,Math.min(112,Math.round(w)));
+  return{g:+g.toFixed(1),c:+c.toFixed(1),Dc:+Dc.toFixed(1),sg:+sg.toFixed(1),sc:+sc.toFixed(1),welfare:w,weavers:Math.round(Ww)};
+}
+function optL2B(r){
+  let b={welfare:-1};
+  for(let p=1.2;p<=4.001;p+=.05){
+    if(r>=7){for(let T=0;T<=10;T++){const s=simL2B(r,p,T);if(s.welfare>b.welfare)b={...s,p:+p.toFixed(2),T}}}
+    else{const s=simL2B(r,p,0);if(s.welfare>b.welfare)b={...s,p:+p.toFixed(2),T:0}}
+  }
+  return b;
+}
+
+const growth=S=>.35*S*(1-S/600);
+const fairShare=S=>Math.max(4,Math.round(growth(S)/3));
+function aiQuotas(r,S,treaty){
+  if(treaty)return[Math.min(treaty,16),Math.min(treaty,18)];
+  if(r<=2)return[20,22];
+  if(r<=4)return S>400?[24,24]:[26,25];
+  return[26,28];
+}
+function stepL3(S,q,a1,a2){
+  let tot=q+a1+a2;
+  const avail=Math.max(0,.5*S);
+  let scale=tot>avail?avail/tot:1;
+  const cq=Math.round(q*scale),c1=Math.round(a1*scale),c2=Math.round(a2*scale);
+  const S2=Math.max(0,Math.round(S+growth(S)-(cq+c1+c2)));
+  return{S2,cq,c1,c2};
+}
+
+/* ═══════════════════ BRIEFINGS (NPC + animation + formula) ═══════════════════ */
+
+const NPCS={mira:{n:"MIRA · TRAVELLING MERCHANT",a:"M"},cai:{n:"ELDER CAI · VILLAGE FOUNDER",a:"C"},rena:{n:"CAPTAIN RENA · RIVER WARDEN",a:"R"}};
+
+function svgDemand(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<line x1="36" y1="126" x2="284" y2="126" stroke="#5a4c38" stroke-width="1.5"/>
+<line x1="36" y1="126" x2="36" y2="14" stroke="#5a4c38" stroke-width="1.5"/>
+<text x="288" y="140" font-size="10" fill="#5a4c38" text-anchor="end">Quantity Q</text>
+<text x="10" y="14" font-size="10" fill="#5a4c38">Price P</text>
+<line x1="46" y1="26" x2="266" y2="116" stroke="#b23a2c" stroke-width="2.5"/>
+<g class="aa" style="animation-name:priceRise">
+ <line x1="36" y1="96" x2="280" y2="96" stroke="#c7973b" stroke-width="2" stroke-dasharray="5 4"/>
+ <text x="234" y="90" font-size="10" fill="#8a6516" font-weight="bold">your price</text>
+</g>
+${[0,1,2,3,4].map(i=>`<g class="aa" style="animation-name:fadeOutUp;animation-delay:${.5+i*.35}s">
+  <circle cx="${70+i*38}" cy="${112-i*16}" r="7" fill="#20180f"/>
+  <circle cx="${70+i*38}" cy="${94-i*16}" r="5" fill="#c7973b"/></g>`).join("")}
+</svg>`}
+
+function svgMC(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<line x1="20" y1="128" x2="290" y2="128" stroke="#5a4c38" stroke-width="1.5"/>
+${[0,1,2,3].map(i=>{const s=1-.22*i;return `
+<g class="aa" style="animation-name:popIn;animation-delay:${.4+i*.6}s;animation-fill-mode:both;animation-iteration-count:1">
+ <circle cx="${58+i*62}" cy="102" r="11" fill="#20180f"/>
+ <rect x="${50+i*62}" y="114" width="16" height="14" rx="2" fill="#20180f"/>
+ <g transform="translate(${58+i*62},72) scale(${s})">
+   <path d="M-13 12 Q-13 -8 0 -12 Q13 -8 13 12 Z" fill="#c7973b" stroke="#8a6516"/>
+   <text y="8" font-size="12" text-anchor="middle" fill="#20180f" font-weight="bold">G</text>
+ </g>
+ <text x="${58+i*62}" y="146" font-size="10" text-anchor="middle" fill="#5a4c38">worker ${i+1}</text>
+</g>`}).join("")}
+<text x="150" y="20" font-size="11" fill="#b23a2c" text-anchor="middle">Each extra worker adds less than the last</text>
+</svg>`}
+
+function svgHill(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<line x1="20" y1="130" x2="290" y2="130" stroke="#5a4c38" stroke-width="1.5"/>
+<path d="M40 122 Q150 6 262 122" fill="none" stroke="#b23a2c" stroke-width="2.5"/>
+<circle r="8" fill="#c7973b" stroke="#8a6516" stroke-width="2" cx="66" cy="106" class="aa" style="animation-name:rollHill"/>
+<line x1="150" y1="64" x2="150" y2="130" stroke="#c7973b" stroke-width="1.5" stroke-dasharray="4 4"/>
+<text x="150" y="146" font-size="10" fill="#8a6516" text-anchor="middle" font-weight="bold">optimum</text>
+<text x="40" y="146" font-size="10" fill="#5a4c38">too low</text>
+<text x="262" y="146" font-size="10" fill="#5a4c38" text-anchor="end">too high</text>
+<text x="150" y="26" font-size="11" fill="#5a4c38" text-anchor="middle">Profit</text>
+</svg>`}
+
+function svgComp(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<g><rect x="30" y="46" width="72" height="62" rx="4" fill="#20180f"/><path d="M24 46 L66 20 L108 46 Z" fill="#b23a2c"/>
+<text x="66" y="82" font-size="13" fill="#e0b45c" text-anchor="middle" font-weight="bold">YOU</text>
+<rect x="42" y="112" width="48" height="18" rx="2" fill="#fffdf6" stroke="#b23a2c"/><text x="66" y="125" font-size="11" text-anchor="middle" fill="#b23a2c" font-weight="bold">18 g</text></g>
+<g><rect x="198" y="46" width="72" height="62" rx="4" fill="#20180f"/><path d="M192 46 L234 20 L276 46 Z" fill="#557a44"/>
+<text x="234" y="82" font-size="12" fill="#e0b45c" text-anchor="middle" font-weight="bold">RIVAL</text>
+<rect x="210" y="112" width="48" height="18" rx="2" fill="#fffdf6" stroke="#557a44"/><text x="234" y="125" font-size="11" text-anchor="middle" fill="#557a44" font-weight="bold">12 g</text></g>
+${[0,1,2].map(i=>`<g class="aa" style="animation-name:walkRight;animation-delay:${.3+i*.5}s">
+ <circle cx="${128+i*8}" cy="${60+i*22}" r="6" fill="#5a4c38"/></g>`).join("")}
+<text x="150" y="16" font-size="11" fill="#b23a2c" text-anchor="middle">Buyers flow to the lower price</text>
+</svg>`}
+
+function svgPPF(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<line x1="40" y1="128" x2="284" y2="128" stroke="#5a4c38" stroke-width="1.5"/>
+<line x1="40" y1="128" x2="40" y2="12" stroke="#5a4c38" stroke-width="1.5"/>
+<text x="284" y="142" font-size="10" fill="#5a4c38" text-anchor="end">Cloth</text>
+<text x="10" y="14" font-size="10" fill="#5a4c38">Grain</text>
+<path d="M40 24 Q200 32 268 128" fill="none" stroke="#b23a2c" stroke-width="2.5"/>
+<circle r="7" fill="#c7973b" stroke="#8a6516" stroke-width="2" class="aa" style="animation-name:rollHill;animation-direction:alternate;animation-duration:2.6s" cx="60" cy="26"/>
+<text x="158" y="80" font-size="11" fill="#5a4c38" text-anchor="middle">One more bolt = less grain</text>
+</svg>`}
+
+function svgSat(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+${[0,1,2].map(i=>`<g transform="translate(${64+i*86},52)">
+ <circle r="20" fill="#fffdf6" stroke="#5a4c38" stroke-width="2"/>
+ <circle cx="-7" cy="-5" r="2.4" fill="#20180f"/><circle cx="7" cy="-5" r="2.4" fill="#20180f"/>
+ ${i===0?'<path d="M-8 6 Q0 13 8 6" fill="none" stroke="#20180f" stroke-width="2"/>':
+   i===1?'<line x1="-8" y1="8" x2="8" y2="8" stroke="#20180f" stroke-width="2"/>':
+   '<path d="M-8 11 Q0 4 8 11" fill="none" stroke="#20180f" stroke-width="2"/>'}
+ <text y="38" font-size="10" text-anchor="middle" fill="#5a4c38">${["Round 1","Round 2","Round 4"][i]}</text></g>`).join("")}
+<rect x="46" y="98" width="36" height="0" fill="#557a44"><animate attributeName="height" values="0;38" dur="1s" fill="freeze"/><animate attributeName="y" values="136;98" dur="1s" fill="freeze"/></rect>
+<rect x="132" y="112" width="36" height="0" fill="#c7973b"><animate attributeName="height" values="0;24" dur="1s" begin=".4s" fill="freeze"/><animate attributeName="y" values="136;112" dur="1s" begin=".4s" fill="freeze"/></rect>
+<rect x="218" y="122" width="36" height="0" fill="#b23a2c"><animate attributeName="height" values="0;14" dur="1s" begin=".8s" fill="freeze"/><animate attributeName="y" values="136;122" dur="1s" begin=".8s" fill="freeze"/></rect>
+<text x="150" y="148" font-size="10" fill="#5a4c38" text-anchor="middle">Same orders, output keeps sliding</text>
+</svg>`}
+
+function svgScale(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<g class="aa" style="animation-name:tipScale;transform-origin:150px 40px">
+ <line x1="60" y1="40" x2="240" y2="40" stroke="#20180f" stroke-width="3"/>
+ <line x1="60" y1="40" x2="60" y2="66" stroke="#5a4c38" stroke-width="1.5"/>
+ <line x1="240" y1="40" x2="240" y2="66" stroke="#5a4c38" stroke-width="1.5"/>
+ <path d="M38 66 Q60 88 82 66" fill="#c7973b" stroke="#8a6516"/>
+ <path d="M218 66 Q240 88 262 66" fill="#c7973b" stroke="#8a6516"/>
+ <text x="60" y="82" font-size="11" text-anchor="middle" fill="#20180f" font-weight="bold">GRAIN</text>
+ <text x="240" y="82" font-size="11" text-anchor="middle" fill="#20180f" font-weight="bold">CLOTH</text>
+</g>
+<line x1="150" y1="40" x2="150" y2="118" stroke="#20180f" stroke-width="4"/>
+<path d="M126 118 h48 l8 14 h-64 Z" fill="#20180f"/>
+<text x="60" y="120" font-size="10.5" fill="#557a44" text-anchor="middle" font-weight="bold">surplus ↓price</text>
+<text x="240" y="120" font-size="10.5" fill="#b23a2c" text-anchor="middle" font-weight="bold">shortage ↑price</text>
+<text x="150" y="16" font-size="11" fill="#5a4c38" text-anchor="middle">Price tips the scales until both sides balance</text>
+</svg>`}
+
+function svgTrade(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<g><path d="M22 58 L58 34 L94 58 Z" fill="#b23a2c"/><rect x="30" y="58" width="56" height="44" fill="#20180f"/>
+<text x="58" y="86" font-size="12" fill="#e0b45c" text-anchor="middle" font-weight="bold">US</text>
+<text x="58" y="118" font-size="10" fill="#5a4c38" text-anchor="middle">fast at grain</text></g>
+<g><path d="M206 58 L242 34 L278 58 Z" fill="#557a44"/><rect x="214" y="58" width="56" height="44" fill="#20180f"/>
+<text x="242" y="86" font-size="12" fill="#e0b45c" text-anchor="middle" font-weight="bold">THEM</text>
+<text x="242" y="118" font-size="10" fill="#5a4c38" text-anchor="middle">fast at cloth</text></g>
+<g class="aa" style="animation-name:walkRight;animation-duration:2.6s">
+ <path d="M108 56 Q108 44 116 42 Q124 44 124 56 Z" fill="#c7973b" stroke="#8a6516"/>
+ <text x="116" y="55" font-size="9" text-anchor="middle" font-weight="bold">G</text></g>
+<g class="aa" style="animation-name:walkRight;animation-duration:2.6s;animation-direction:reverse">
+ <rect x="106" y="82" width="20" height="14" rx="2" fill="#fffdf6" stroke="#5a4c38"/>
+ <text x="116" y="93" font-size="9" text-anchor="middle" font-weight="bold">C</text></g>
+<text x="150" y="16" font-size="11" fill="#557a44" text-anchor="middle" font-weight="bold">Each does what it does best — both grow richer</text>
+<text x="150" y="142" font-size="10" fill="#5a4c38" text-anchor="middle">+welfare ←→ +welfare</text>
+</svg>`}
+
+function svgFish(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<rect x="16" y="50" width="268" height="84" rx="10" fill="#213029"/>
+${[0,1,2,3,4,5].map(i=>`<g class="aa" style="animation-name:swim;animation-delay:${i*.4}s" transform="translate(${40+(i%3)*84},${72+Math.floor(i/3)*32})">
+ <path d="M0 0 Q10 -7 20 0 Q10 7 0 0 Z" fill="#e0b45c"/><path d="M0 0 L-8 -6 L-8 6 Z" fill="#e0b45c"/></g>`).join("")}
+<text x="150" y="30" font-size="11" fill="#5a4c38" text-anchor="middle">Fish make fish — slower than nets take them</text>
+<text x="150" y="146" font-size="10" fill="#5a4c38" text-anchor="middle">Growth peaks mid-stock; too low and it can't recover</text>
+</svg>`}
+
+function svgTragedy(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<rect x="16" y="66" width="268" height="68" rx="10" fill="#213029"/>
+${[0,1,2].map(i=>`<g transform="translate(${52+i*88},52)">
+ <path d="M-20 8 L20 8 L12 20 L-12 20 Z" fill="#5a4c38"/>
+ <line x1="0" y1="8" x2="0" y2="-12" stroke="#20180f" stroke-width="2"/>
+ <path d="M0 -12 L16 -2 L0 4 Z" fill="#b23a2c"/>
+ <text y="34" font-size="9" fill="#bfd0be" text-anchor="middle">Village ${["I","II","III"][i]}</text></g>`).join("")}
+${[0,1,2,3].map(i=>`<g class="aa" style="animation-name:fadeAway;animation-delay:${i*.5}s" transform="translate(${60+i*56},108)">
+ <path d="M0 0 Q8 -5 16 0 Q8 5 0 0 Z" fill="#e0b45c"/></g>`).join("")}
+<rect x="252" y="38" width="14" height="52" fill="#b23a2c"><animate attributeName="height" values="52;52;14;14" dur="3.4s" repeatCount="indefinite"/><animate attributeName="y" values="38;38;76;76" dur="3.4s" repeatCount="indefinite"/></rect>
+<text x="259" y="30" font-size="9" fill="#b23a2c" text-anchor="middle">stock</text>
+<text x="150" y="16" font-size="10.5" fill="#b23a2c" text-anchor="middle">Everyone casts "one more net" — the stock pays</text>
+</svg>`}
+
+function svgMatrix(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<g transform="translate(84,32)">
+<rect x="0" y="0" width="148" height="96" fill="#fffdf6" stroke="#5a4c38"/>
+<line x1="74" y1="0" x2="74" y2="96" stroke="#5a4c38"/>
+<line x1="0" y1="48" x2="148" y2="48" stroke="#5a4c38"/>
+<text x="37" y="-8" font-size="9" text-anchor="middle" fill="#5a4c38">they hold back</text>
+<text x="111" y="-8" font-size="9" text-anchor="middle" fill="#5a4c38">they overfish</text>
+<text x="-8" y="26" font-size="9" text-anchor="end" fill="#5a4c38">I hold back</text>
+<text x="-8" y="74" font-size="9" text-anchor="end" fill="#5a4c38">I overfish</text>
+<text x="37" y="28" font-size="11" text-anchor="middle" fill="#557a44" font-weight="bold">3 , 3</text>
+<text x="111" y="28" font-size="11" text-anchor="middle" fill="#5a4c38">0 , 5</text>
+<text x="37" y="76" font-size="11" text-anchor="middle" fill="#5a4c38">5 , 0</text>
+<text x="111" y="76" font-size="11" text-anchor="middle" fill="#b23a2c" font-weight="bold">1 , 1</text>
+<rect x="74" y="48" width="74" height="48" fill="none" stroke="#b23a2c" stroke-width="3" class="aa" style="animation-name:blinkCell"/>
+</g>
+<text x="150" y="146" font-size="10" fill="#b23a2c" text-anchor="middle">Each "best choice" lands in the worst cell for all</text>
+</svg>`}
+
+function svgTreaty(){return `<svg width="300" height="150" viewBox="0 0 300 150">
+<g class="aa" style="animation-name:shake;transform-origin:150px 60px;animation-duration:2s">
+<path d="M108 62 Q126 46 146 58 L154 62 Q170 48 190 60 L172 76 Q152 88 138 76 Q120 82 108 62 Z" fill="#c7973b" stroke="#8a6516" stroke-width="1.5"/>
+</g>
+<text x="150" y="30" font-size="12" fill="#20180f" text-anchor="middle" font-weight="bold">FISHING TREATY</text>
+<rect x="70" y="104" height="14" rx="3" fill="#557a44" width="30"><animate attributeName="width" values="30;110" dur="2.4s" fill="freeze"/></rect>
+<rect x="70" y="104" width="150" height="14" rx="3" fill="none" stroke="#5a4c38"/>
+<text x="150" y="136" font-size="10" fill="#557a44" text-anchor="middle" font-weight="bold">Treaty in force → the stock recovers</text>
+</svg>`}
+
+const TIPS={
+ 1:[
+  {npc:"mira",t:"You've hammered out your first batch of iron tools. Now the hard part — the price. Too high and nobody buys; too low and you're working for free. Every villager carries a number in their head: the most they'll pay. Cross it, and they walk.",anim:svgDemand,cap:"As the price rises, buyers with the lowest willingness to pay leave one by one",
+   f:{e:"Demand Q(P) = number of buyers whose WTP ≥ P",n:"Mira: Want it exact? Count the heads whose number isn't below your price. Materials cost 4 gold per tool — profit = units sold × (price − 4)."}},
+  {npc:"mira",t:"You saw yesterday's market. The shelf is repaired today — it holds 15 pieces now. Same buyers, same logic. This time, get closer to the top.",anim:svgDemand,cap:"The same demand curve, a second chance",
+   f:{e:"Profit = units sold × (P − 4)",n:"Trying every price is slow. Ask instead where yesterday leaked: unsold stock, or money left on the table?"}},
+  {npc:"mira",t:"More output means more hands, at 8 gold a day each. But remember: the fifth worker adds far less than the first — the workshop is only so big, and they start getting in each other's way. The wages don't shrink, though.",anim:svgMC,cap:"Each extra worker brings home a smaller sack of grain",
+   f:{e:"MC = ΔTC ÷ ΔQ",n:"Mira: This tells you exactly what one more piece costs you. But honestly? Just watch the sacks. Materials are down to 2 gold per piece."}},
+  {npc:"mira",t:"You did yesterday's books. Today you turn both dials — workers and price. Don't stare at just one: producing what you can't sell is a loss, and selling what you can't produce is a loss too.",anim:svgMC,cap:"Output and sales — you need both",
+   f:{e:"Profit = units sold × (P − 2) − 8 × workers",n:"Units sold is the smaller of the two: demand, and what your workshop actually made."}},
+  {npc:"mira",t:"Profit is a hill. Price too low and you're on this slope; too high and you're on that one. There is only one summit. Today's job: stand on it.",anim:svgHill,cap:"The optimum: the point where any step makes things worse",
+   f:{e:"At the optimum: MR = MC",n:"When the extra gold from one more sale (marginal revenue) exactly equals the extra cost of making it (marginal cost), profit peaks."}},
+  {npc:"mira",t:"Near the summit every step gets smaller. Park both dials where nudging them either way makes things worse — that's what the top feels like.",anim:svgHill,cap:"At the summit, small adjustments stop helping",
+   f:{e:"ΔProfit ≈ 0 ⇒ you're at the top",n:"Try one notch up, then one notch down. Both worse? Congratulations — you found it."}},
+  {npc:"mira",t:"Bad news. A smith has set up across the river, selling the same tools, asking 12 gold. Price above him and the buyers won't be sentimental about it. Your pricing power may be over.",anim:svgComp,cap:"Price above your rival and buyers leave at once",
+   f:{e:"P > rival's price ⇒ demand collapses by 85%",n:"As a monopolist you choose the price. In competition, the price chooses you."}},
+  {npc:"mira",t:"He's down to 10. Match him, or not? Match — margins thin as paper. Don't — an empty shop. Welcome to a competitive market, where the price is no longer yours to set.",anim:svgComp,cap:"A price war: the discipline of competition",
+   f:{e:"Competitive limit: P → MC",n:"Under perfect competition the price gets pushed down toward marginal cost — which is exactly why buyers like competition."}},
+ ],
+ 2:[
+  {npc:"cai",t:"The workshop has become a village — a hundred souls awaiting your word. Grain or cloth? Every hand sent to the fields is a hand off the loom. The village needs about 90 sacks of grain and 12 bolts of cloth each season. Assign them, chief.",anim:svgPPF,cap:"The production possibilities frontier: more of one means less of the other",
+   f:{e:"Opportunity cost = the option you gave up",n:"One person yields 1.2 sacks farming, or 0.5 bolts weaving. So one more bolt of cloth costs 2.4 sacks of grain."}},
+  {npc:"cai",t:"They followed yesterday's orders to the letter. But did you notice — the harvest came in under your arithmetic? The ledger is not wrong. The hearts are changing.",anim:svgPPF,cap:"The same orders, quietly discounted",
+   f:{e:"Actual output = theoretical output × efficiency",n:"Efficiency is not a constant. A commanded hand and a willing hand are not the same hand."}},
+  {npc:"cai",t:"Hearts are changing. A commanded hand weaves no careful cloth. Look at their faces — of the effort you once had, eighty-six percent remains.",anim:svgSat,cap:"Satisfaction falls, and output follows",
+   f:{e:"Efficiency: 100% → 93% → 86% → …",n:"Under compulsion, slacking is rational: work more or work less, your share is the same."}},
+  {npc:"cai",t:"Output has fallen again. The orders are the same orders; the people are not the same people. Seventy years I have led this village, and for the first time I will say it aloud: perhaps we need another way.",anim:svgSat,cap:"The limits of planning: information and incentives",
+   f:{e:"No incentives ⇒ efficiency drains away",n:"From tomorrow, try issuing no orders at all — and let price speak for you."}},
+  {npc:"cai",t:"From today, no more commands. You set one number: how many sacks of grain a bolt of cloth is worth. Price cloth high and weavers appear; price it low and they drift back to the fields. Watch how one invisible hand moves a hundred people.",anim:svgScale,cap:"A surplus pushes price down, a shortage pushes it up",
+   f:{e:"Equilibrium: supply = demand",n:"A surplus tells you the price is off. Too much cloth and too little grain? Cloth is priced too high. And the reverse."}},
+  {npc:"cai",t:"You saw the scales yesterday. A surplus is the market saying 'too much'; a shortage is it saying 'not enough'. Learn to hear what prices say, and the village settles itself.",anim:svgScale,cap:"Drive both imbalances toward zero",
+   f:{e:"|surplus| + |shortage| → 0",n:"Efficiency is back to full, too — a willing hand really is a different hand."}},
+  {npc:"cai",t:"The chief from the next valley has come. They weave quickly and farm slowly — the mirror of us. His offer: 1 bolt of cloth for 1.6 sacks of grain. Seventy years old, and only now do I see it plainly: exchange can leave both sides richer.",anim:svgTrade,cap:"Each does what it does best, and both end up richer",
+   f:{e:"Buy at 1.6 < make at 2.4 ⇒ buy",n:"Weaving a bolt ourselves costs 2.4 sacks of grain. The neighbors ask only 1.6 — the 0.8 we keep is the gain from trade."}},
+  {npc:"cai",t:"The ratio is settled. Buy more cloth, and send the freed hands back to the fields — this is not a trick, it is comparative advantage. Two villages, and neither can do without the other now.",anim:svgTrade,cap:"Trade pushes welfare past the limits of self-sufficiency",
+   f:{e:"Gains from trade = (2.4 − 1.6) × quantity traded",n:"Note that the neighbors gain as well. Trade is not zero-sum."}},
+ ],
+ 3:[
+  {npc:"rena",t:"This river belongs to no village. The fish are everyone's — which is to say, they are not yours. Take as many as you like; so will the two villages upstream. Thirty years I've patrolled this water, so take my advice: don't only look at today's net.",anim:svgFish,cap:"A renewable resource: fish slowly, and there will be fish",
+   f:{e:"Fish growth = 0.35 × S × (1 − S/600)",n:"The stock breeds fastest at a middling size. What all three villages can sustainably take is roughly the growth each round."}},
+  {npc:"rena",t:"Fish make fish — just slower than you pull them out. Look at yesterday's count: it has already started falling. Your workshop was yours. This river is not.",anim:svgFish,cap:"You look after what you own. What about what everyone owns?",
+   f:{e:"Fair share ≈ growth ÷ 3",n:"If every village takes its fair share, the river outlives your grandchildren. The problem: why would you trust the others to do it?"}},
+  {npc:"rena",t:"Down again. Every village says the same thing: 'my holding back changes nothing, they'll fish anyway.' They're right — and wrong. This is the tragedy of the commons: nobody wants to kill this river, and everybody is killing it.",anim:svgTragedy,cap:"Individual rationality × 3 = collective disaster",
+   f:{e:"The gain is yours, the cost is shared",n:"One more net: the fish go into your hold, and the loss to the stock is split three ways. So everyone casts one more — that is the arithmetic of the tragedy."}},
+  {npc:"rena",t:"At this rate the river runs empty in four rounds. But whoever stops first goes hungry first. I have seen how this ends. It isn't pretty.",anim:svgTragedy,cap:"The countdown to collapse has started",
+   f:{e:"S < 300 ⇒ on the brink",n:"Below the threshold the stock struggles to recover on its own. You don't have many rounds left."}},
+  {npc:"rena",t:"The two upstream villages have added boats. Hold back and they profit; take more and the river dies faster. A bind? Your kind has a name for it — the prisoner's dilemma. I don't follow you landsmen's learning, but I understand this table.",anim:svgMatrix,cap:"The payoff matrix: cooperation is better, defection is safer",
+   f:{e:"Defection is the dominant strategy",n:"Whatever the others do, 'take more' pays you better — so everyone takes more, and all of you land in the bottom-right cell."}},
+  {npc:"rena",t:"See it now? Every one of them picked the move that was best for themselves, and it landed in the cell that's worst for everyone — and not one of them wants to move first. This is your 'equilibrium'? Bah.",anim:svgMatrix,cap:"Stable does not mean good",
+   f:{e:"Nash equilibrium: nobody gains by moving alone",n:"The bottom-right cell is stable — pulling back on your own only costs you more. To escape it, everyone has to move at once."}},
+  {npc:"rena",t:"Enough. I've called all three villages to the bend. Propose a quota — the most each village may take per round. Too harsh and they walk out; too generous and the river dies anyway. Negotiating is harder than fishing.",anim:svgTreaty,cap:"A treaty: turning 'we all stop' into a credible promise",
+   f:{e:"Feasible range: each village's floor ≤ quota ≤ the river's ceiling",n:"Each village needs about 10 (below that they go hungry and refuse); the river bears about 14 (3 villages × 14 ≈ current growth — above that the stock keeps falling)."}},
+  {npc:"rena",t:"Signed and sealed, all three villages. Now none of them dares break it first — breaking costs more than keeping. Thirty years on this water, and for the first time I think this river might live.",anim:svgTreaty,cap:"A new equilibrium: cooperation can be stable too",
+   f:{e:"The treaty changes the payoffs ⇒ the equilibrium moves",n:"Penalties make defection no longer dominant — and that is what institutions are for."}},
+ ]
+};
+
+/* ═══════════════════ GAME STATE ═══════════════════ */
+
+const G={
+  screen:"title", level:1, round:1,
+  gold:40, welfare:null, fish:500,
+  fishHist:[], cumCatch:{me:0,a:0,b:0}, quotaHist:[],
+  treaty:null, negoTried:0, negoDone:false,
+  snaps:{}, lastResult:null, lastDecision:null,
+  ratings:[],
+};
+const SNAP_FIELDS=["level","round","gold","welfare","fish","fishHist","cumCatch","quotaHist","treaty","negoTried","negoDone","ratings"];
+function snapshot(){
+  const s={};SNAP_FIELDS.forEach(k=>s[k]=G[k]);
+  G.snaps[G.level+"-"+G.round]=JSON.parse(JSON.stringify(s));
+}
+function restoreTo(lv,r){
+  const s=G.snaps[lv+"-"+r];if(!s)return false;
+  Object.assign(G,JSON.parse(JSON.stringify(s)));
+  return true;
+}
+function backRound(){
+  if(G.round>1&&restoreTo(G.level,G.round-1))screenTip();
+  else screenTitle();
+}
+
+/* ═══════════════════ RENDERING ═══════════════════ */
+
+const stage=document.getElementById("stage");
+const topmeta=document.getElementById("topmeta");
+const LEVEL_NAMES=["","Level 1 · The Workshop","Level 2 · The Village","Level 3 · The River"];
+
+function renderTop(){
+  if(G.screen==="title"){topmeta.innerHTML="";return}
+  let res="";
+  if(G.level===1)res=`Vault <b>${G.gold}</b> gold`;
+  if(G.level===2)res=G.welfare==null?`Villagers <b>100</b>`:`Welfare <b>${G.welfare}</b>`;
+  if(G.level===3)res=`Stock <b>${G.fish}</b> / 500`;
+  topmeta.innerHTML=`<span>${LEVEL_NAMES[G.level]}</span><span>Round <b>${G.round}</b> / 8</span><span>${res}</span>`;
+}
+function dots(){
+  let s='<div class="progress-dots">';
+  for(let i=1;i<=8;i++)s+=`<div class="pdot ${i<G.round?"done":i===G.round?"cur":""}"></div>`;
+  return s+"</div>";
+}
+function show(html){stage.innerHTML=html;renderTop();window.scrollTo({top:0,behavior:"smooth"})}
+function bindSlider(id,fmt){
+  const el=document.getElementById(id),out=document.getElementById(id+"-v");
+  const upd=()=>{
+    const p=(el.value-el.min)/(el.max-el.min)*100;
+    el.style.setProperty("--pct",p+"%");
+    out.innerHTML=fmt(el.value);
+  };
+  el.addEventListener("input",upd);upd();
+}
+
+/* ── title · level select ── */
+function screenTitle(){
+  G.screen="title";
+  const levels=[
+    {n:1,t:"The Workshop",sub:"Demand · Pricing · Marginal cost · Monopoly vs. competition",q:"How do I make the most profit?"},
+    {n:2,t:"The Village",sub:"Plan vs. market · Price signals · Equilibrium · Trade",q:"How do we coordinate production and exchange?"},
+    {n:3,t:"The River",sub:"Common resources · Prisoner's dilemma · Nash equilibrium · Negotiation",q:"What happens when everyone acts in their own interest?"},
+  ];
+  const cards=levels.map(l=>`
+    <div style="border:1px solid var(--line);border-radius:4px;background:#fffdf6;padding:18px 20px;margin:10px 0;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:240px;text-align:left">
+        <div class="eyebrow" style="margin-bottom:4px">LEVEL ${l.n} · 8 ROUNDS</div>
+        <div class="serif" style="font-size:24px;font-weight:700">${l.t}</div>
+        <div class="dim" style="margin:4px 0 2px">${l.sub}</div>
+        <div style="font-size:13px;color:var(--seal);font-weight:700">${l.q}</div>
+      </div>
+      <button class="main" onclick="startLevel(${l.n})">Enter</button>
+    </div>`).join("");
+  show(`<div class="card" style="text-align:center;padding:44px 34px">
+    <div class="eyebrow">ECONQUEST · PLAYABLE DEMO</div>
+    <h1 class="serif" style="font-size:52px">EconQuest</h1>
+    <p class="dim" style="margin:8px auto 22px;max-width:470px">You are a founder setting foot on an uncharted continent. From a single workshop, to a village, to a river shared with strangers — every decision is a lesson in economics.<br>Playing in order is recommended, but you may begin at any level.</p>
+    ${cards}
+    <p class="dim" style="margin-top:18px;font-size:12px">You can return to any earlier round at any time to relearn and redecide · no permanent failure</p>
+  </div>`);
+}
+
+/* ── level intro ── */
+const INTROS={
+ 1:{t:"The Workshop",p:"The sea wind is salt-sharp, and the first cook-smoke rises over the new settlement. You set up your anvil and hammer out the first batch of tools — the only such trade in the village.<br><br>No rivals. No rules. The price is yours to set.<br>— but the villagers' purses are not.",q:"Core question: How do I make the most profit?"},
+ 2:{t:"The Village",p:"A few years on, a hundred people have gathered around the workshop. Farmers, weavers, smiths — and every one of them looks to you to decide.<br><br>You are the chief now. But a hundred livelihoods are far harder to reckon than one shop's books.",q:"Core question: How do we coordinate production and exchange?"},
+ 3:{t:"The River",p:"The village grew along the river, and two more have since settled upstream. The fish feed all three — but the river belongs to no one.<br><br>Captain Rena has patrolled this water for thirty years. She says she has seen a river run empty.",q:"Core question: What happens when everyone acts in their own interest?"},
+};
+function startLevel(lv){
+  G.level=lv;G.round=1;G.treaty=null;G.negoTried=0;G.negoDone=false;G.ratings=[];
+  Object.keys(G.snaps).forEach(k=>{if(k.startsWith(lv+"-"))delete G.snaps[k]});
+  if(lv===1)G.gold=40;
+  if(lv===2)G.welfare=null;
+  if(lv===3){G.fish=500;G.fishHist=[500];G.cumCatch={me:0,a:0,b:0};G.quotaHist=[]}
+  const I=INTROS[lv];G.screen="intro";
+  show(`<div class="card">
+    <div class="eyebrow">LEVEL ${lv}</div>
+    <h1 class="serif">${I.t}</h1>
+    <p style="margin:14px 0">${I.p}</p>
+    <p style="font-weight:700;color:var(--seal)">${I.q}</p>
+    <div class="btnrow"><button class="main" onclick="screenTip()">Begin round 1</button></div>
+  </div>`);
+}
+
+/* ── briefing (NPC + animation) ── */
+function screenTip(){
+  G.screen="tip";snapshot();
+  const tip=TIPS[G.level][G.round-1];
+  const npc=NPCS[tip.npc];
+  show(`<div class="card">
+    <div class="eyebrow">ROUND ${G.round} · WATCH</div>
+    ${dots()}
+    <div class="npc-row">
+      <div class="avatar serif">${npc.a}</div>
+      <div class="bubble"><div class="npc-name">${npc.n}</div><p>${tip.t}</p></div>
+    </div>
+    <div class="animbox">${tip.anim()}</div>
+    <div class="anim-cap">${tip.cap}</div>
+    <details class="formula"><summary>Math shortcut (optional)</summary>
+      <div class="fbody"><div class="expr">${tip.f.e}</div><p class="dim">${tip.f.n}</p></div>
+    </details>
+    <div class="btnrow"><button class="main" onclick="screenDecide()">To the decision</button>
+      <button class="ghost" onclick="backRound()">${G.round>1?"← Previous round":"← Level select"}</button></div>
+  </div>`);
+}
+
+/* ── decision ── */
+function screenDecide(){
+  G.screen="decide";
+  const r=G.round,lv=G.level;
+  let inner="",badges="",intel="",wire=()=>{};
+  if(lv===1){
+    const cfg=L1CFG[r-1];
+    if(cfg.comp)badges=`<span class="badge warn">Rival's price: ${cfg.comp} gold</span>`;
+    if(!cfg.workers)badges+=`<span class="badge">Shelf capacity: ${cfg.cap} pieces</span><span class="badge">Materials: 4 gold/piece</span>`;
+    else badges+=`<span class="badge">Wages: 8 gold/worker</span><span class="badge">Materials: 2 gold/piece</span>`;
+    inner=`<div class="ctl"><div class="ctl-head"><span class="ctl-label">Selling price</span><span class="ctl-val" id="p-v"></span></div>
+      <input type="range" id="p" min="5" max="28" value="16" step="1">
+      <div class="ctl-scale"><span>5 gold</span><span>28 gold</span></div></div>`;
+    if(cfg.workers)inner+=`<div class="ctl"><div class="ctl-head"><span class="ctl-label">Workers hired</span><span class="ctl-val" id="w-v"></span></div>
+      <input type="range" id="w" min="0" max="10" value="4" step="1">
+      <div class="ctl-scale"><span>0</span><span>10</span></div></div>`;
+    intel=`<div class="intel"><div class="intel-title">MIRA'S MARKET SURVEY</div>
+      <div class="intel-row">At this price, buyers willing to purchase: <b id="iq">—</b>${cfg.comp?`<span id="icomp" style="color:var(--seal);font-size:12.5px"></span>`:""}</div>
+      ${cfg.workers?`<div class="intel-row">At this headcount, workshop output: <b id="io">—</b> pieces</div>`:""}
+      <div class="intel-note">Units sold = the smaller of demand and ${cfg.workers?"output":"shelf capacity"} · Profit = units sold × (price − materials)${cfg.workers?" − total wages":""}. Do the arithmetic or don't — but the numbers are right here.</div></div>`;
+    wire=()=>{
+      const upd=()=>{
+        const P=+document.getElementById("p").value;
+        const W=document.getElementById("w")?+document.getElementById("w").value:0;
+        let d=demand(P),note="";
+        if(cfg.comp&&P>cfg.comp){d=Math.floor(d*0.15);note=`  ⚠ above the rival — most buyers go to him`;}
+        document.getElementById("iq").textContent=d;
+        if(cfg.comp)document.getElementById("icomp").textContent=note;
+        if(cfg.workers)document.getElementById("io").textContent=OUT[W];
+      };
+      document.getElementById("p").addEventListener("input",upd);
+      if(document.getElementById("w"))document.getElementById("w").addEventListener("input",upd);
+      upd();
+    };
+  }
+  if(lv===2&&r<=4){
+    badges=`<span class="badge">Villager satisfaction ${SAT[r-1]} / 100</span><span class="badge">Needs: 90 grain · 12 cloth</span>`;
+    inner=`<div class="ctl"><div class="ctl-head"><span class="ctl-label">Villagers assigned to farming</span><span class="ctl-val" id="f-v"></span></div>
+      <input type="range" id="f" min="0" max="100" value="50" step="5">
+      <div class="ctl-scale"><span>all weaving</span><span>all farming</span></div></div>`;
+    intel=`<div class="intel"><div class="intel-title">THE CHIEF'S LEDGER</div>
+      <div class="intel-row">On paper: grain <b id="ig">—</b> sacks · cloth <b id="ic">—</b> bolts</div>
+      <div class="intel-note">Per head: 1.2 sacks farming · 0.5 bolts weaving.${r===1?"":" — but a ledger is a ledger and hearts are hearts. Lately the real harvest keeps coming in under the paper."}</div></div>`;
+    wire=()=>{
+      const upd=()=>{
+        const F=+document.getElementById("f").value;
+        document.getElementById("ig").textContent=(1.2*F).toFixed(0);
+        document.getElementById("ic").textContent=(.5*(100-F)).toFixed(1);
+      };
+      document.getElementById("f").addEventListener("input",upd);upd();
+    };
+  }
+  if(lv===2&&r>=5){
+    badges=`<span class="badge">Demand: 90 sacks of grain (steady)</span>`;
+    if(r>=7)badges+=`<span class="badge" style="background:var(--leaf)">Neighbors offer: 1 bolt = 1.6 sacks</span>`;
+    inner=`<div class="ctl"><div class="ctl-head"><span class="ctl-label">Cloth price (1 bolt = ? sacks of grain)</span><span class="ctl-val" id="p2-v"></span></div>
+      <input type="range" id="p2" min="1.2" max="4" value="2.0" step="0.05">
+      <div class="ctl-scale"><span>1.2</span><span>4.0</span></div></div>`;
+    if(r>=7)inner+=`<div class="ctl"><div class="ctl-head"><span class="ctl-label">Bolts bought from the neighbors</span><span class="ctl-val" id="t-v"></span></div>
+      <input type="range" id="t" min="0" max="10" value="0" step="1">
+      <div class="ctl-scale"><span>no trade</span><span>10 bolts</span></div></div>`;
+    intel=`<div class="intel"><div class="intel-title">ELDER CAI'S OBSERVATIONS</div>
+      <div class="intel-row">At this price about <b id="iw">—</b> villagers weave → cloth supply ≈ <b id="ics">—</b> bolts · grain supply ≈ <b id="igs">—</b> sacks</div>
+      <div class="intel-row">At this price villagers want about <b id="idc">—</b> bolts (the higher the price, the less they want)</div>
+      ${r>=7?`<div class="intel-row">After trade: cloth <b id="itc">—</b> bolts · grain <b id="itg">—</b> sacks (1.6 sacks paid per bolt)</div>`:""}
+      <div class="intel-note">Higher price → more weavers and fewer buyers; lower price, the reverse. Get supply to meet demand and both markets settle.</div></div>`;
+    wire=()=>{
+      const upd=()=>{
+        const p=+document.getElementById("p2").value;
+        const T=document.getElementById("t")?+document.getElementById("t").value:0;
+        const s=Math.min(.7,Math.max(.02,.25*Math.pow(p/2.4,2)));
+        const Ww=100*s,g=1.2*(100-Ww),c=.5*Ww,Dc=12*Math.pow(2.4/p,.8);
+        document.getElementById("iw").textContent=Math.round(Ww);
+        document.getElementById("ics").textContent=c.toFixed(1);
+        document.getElementById("igs").textContent=g.toFixed(0);
+        document.getElementById("idc").textContent=Dc.toFixed(1);
+        if(r>=7){
+          document.getElementById("itc").textContent=(c+T).toFixed(1);
+          document.getElementById("itg").textContent=(g-1.6*T).toFixed(0);
+        }
+      };
+      document.getElementById("p2").addEventListener("input",upd);
+      if(document.getElementById("t"))document.getElementById("t").addEventListener("input",upd);
+      upd();
+    };
+  }
+  if(lv===3){
+    const cap=G.treaty?Math.min(30,G.treaty):30;
+    badges=`<span class="badge">Stock ${G.fish} / 500</span><span class="badge">Growth this round ≈ ${Math.round(growth(G.fish))} fish</span>`;
+    if(G.treaty)badges+=`<span class="badge" style="background:var(--leaf)">Treaty cap: ${G.treaty} fish/village</span>`;
+    inner=`<div class="ctl"><div class="ctl-head"><span class="ctl-label">Your village's fishing quota</span><span class="ctl-val" id="q-v"></span></div>
+      <input type="range" id="q" min="0" max="${cap}" value="${Math.min(15,cap)}" step="1">
+      <div class="ctl-scale"><span>0</span><span>${cap}</span></div></div>`;
+    const hist=G.quotaHist.slice(-4);
+    const histRows=hist.length
+      ?hist.map(h=>`<tr><td>${h.r}</td><td>${h.a}</td><td>${h.b}</td><td>${h.S}</td></tr>`).join("")
+      :`<tr><td colspan="4" style="font-family:inherit">No records yet · by eye, each fleet looks 20+ strong</td></tr>`;
+    intel=`<div class="intel"><div class="intel-title">RENA'S WATCH LOG</div>
+      <div class="intel-row">Sustainable total for three villages ≈ this round's growth (${Math.round(growth(G.fish))} fish) → fair share ≈ <b>${fairShare(G.fish)}</b> per village</div>
+      <table class="itable"><tr><th>Round</th><th>Village I</th><th>Village II</th><th>Stock at end</th></tr>${histRows}</table>
+      <div class="intel-note">${G.treaty?"Treaty in force — each village fishes to the cap.":"You can only guess the upstream villages' plans from the record. That is the game: your best move depends on theirs."}</div></div>`;
+  }
+  show(`<div class="card">
+    <div class="eyebrow">ROUND ${G.round} · DECIDE</div>
+    ${dots()}
+    <div style="margin-bottom:6px">${badges}</div>
+    ${intel}
+    ${inner}
+    <p class="dim" style="margin-top:4px">You have the intelligence; the commitment is yours. Nothing is revealed until you settle.</p>
+    <div class="btnrow"><button class="main" onclick="resolve()">Settle the round</button>
+      <button class="ghost" onclick="screenTip()">← Replay the briefing</button></div>
+  </div>`);
+  if(document.getElementById("p"))bindSlider("p",v=>`${v} <small>gold</small>`);
+  if(document.getElementById("w"))bindSlider("w",v=>`${v} <small>workers</small>`);
+  if(document.getElementById("f"))bindSlider("f",v=>`${v} <small>farm · ${100-v} weave</small>`);
+  if(document.getElementById("p2"))bindSlider("p2",v=>`${(+v).toFixed(2)} <small>sacks</small>`);
+  if(document.getElementById("t"))bindSlider("t",v=>`${v} <small>bolts</small>`);
+  if(document.getElementById("q"))bindSlider("q",v=>`${v} <small>fish</small>`);
+  wire();
+}
+
+/* ── settlement ── */
+function resolve(){
+  const lv=G.level,r=G.round;
+  if(lv===1){
+    const P=+document.getElementById("p").value;
+    const W=document.getElementById("w")?+document.getElementById("w").value:0;
+    const res=simL1(r,P,W),opt=optL1(r);
+    G.gold+=res.profit;
+    G.lastDecision={P,W};G.lastResult={res,opt};
+    if(G.gold<0)return screenCollapse("The vault is empty. Round after round of losses has drained your savings — the workers have scattered and the workshop stands shut.","Last round's combination of price and output ran at a loss. Return to the checkpoint and try another.");
+  }
+  if(lv===2&&r<=4){
+    const F=+document.getElementById("f").value;
+    const res=simL2A(r,F),opt=optL2A(r);
+    G.welfare=res.welfare;
+    G.lastDecision={F};G.lastResult={res,opt};
+    if(res.welfare<25)return screenCollapse("The granary and the cloth store are badly out of balance, and the complaints are loud — this will be a hard winter.","Your allocation is far from what the village needs (90 grain · 12 cloth). Return to the checkpoint and weigh it again.");
+  }
+  if(lv===2&&r>=5){
+    const p=+document.getElementById("p2").value;
+    const T=document.getElementById("t")?+document.getElementById("t").value:0;
+    const res=simL2B(r,p,T),opt=optL2B(r);
+    G.welfare=res.welfare;
+    G.lastDecision={p,T};G.lastResult={res,opt};
+    if(res.welfare<25)return screenCollapse("Prices are badly distorted and the market has seized up — cloth piles up unsold while nobody will part with grain.","Both the surplus and the shortage are far too large. Return to the checkpoint and move the price closer to where both markets clear at once.");
+  }
+  if(lv===3){
+    const q=+document.getElementById("q").value;
+    const[a1,a2]=aiQuotas(r,G.fish,G.treaty);
+    const st=stepL3(G.fish,q,a1,a2);
+    G.cumCatch.me+=st.cq;G.cumCatch.a+=st.c1;G.cumCatch.b+=st.c2;
+    G.quotaHist.push({r,me:q,a:a1,b:a2,S:st.S2});
+    const prev=G.fish;G.fish=st.S2;G.fishHist.push(st.S2);
+    G.lastDecision={q};G.lastResult={st,prev,a1,a2,fair:fairShare(prev)};
+  }
+  screenFeedback();
+}
+
+/* ── feedback ledger ── */
+function lrow(k,you,opt,unit,over){
+  const max=Math.max(you,opt,1);
+  const wy=Math.min(100,you/max*100),wo=Math.min(100,opt/max*100);
+  return`<div class="lrow"><div class="lrow-head"><span class="k">${k}</span>
+    <span class="v">${you} <span class="opt">/ optimal ${opt} ${unit}</span></span></div>
+    <div class="bars"><div class="bar-opt" style="width:0" data-w="${wo}"></div>
+    <div class="bar-you ${over?"over":""}" style="width:0" data-w="${wy}"></div></div></div>`;
+}
+function stampFor(ratio){
+  if(ratio>=.9)return`<div class="stamp good serif">A</div>`;
+  if(ratio>=.65)return`<div class="stamp mid serif">B</div>`;
+  return`<div class="stamp serif">C</div>`;
+}
+function screenFeedback(){
+  G.screen="feedback";
+  const lv=G.level,r=G.round;let rows="",hint="",why="",ratio=0;
+  if(lv===1){
+    const{res,opt}=G.lastResult,{P,W}=G.lastDecision;
+    ratio=opt.profit>0?Math.max(0,res.profit/opt.profit):1;
+    rows=lrow("Profit",res.profit,opt.profit,"gold",false)
+        +lrow("Units sold",res.sold,opt.sold,"pieces",false);
+    const dp=P-opt.P;
+    hint=dp>1?`▲ Your price was ${dp} gold too high — some buyers walked away.`:dp<-1?`▼ Your price was ${-dp} gold too low — you sold more and earned less.`:`● Your price was close to optimal.`;
+    if(L1CFG[r-1].workers){const dw=W-opt.W;
+      if(dw>0)hint+=` ${dw} worker(s) too many: the extra wages cost more than the extra output was worth.`;
+      if(dw<0)hint+=` ${-dw} worker(s) too few: there was still profitable capacity going unused.`;}
+    why=`This round's optimum: price <b>${opt.P} gold</b>${L1CFG[r-1].workers?`, <b>${opt.W} worker(s)</b>`:""}, for a profit of ${opt.profit} gold.`+
+      (L1CFG[r-1].comp?` Under competition the optimum is pinned down by your rival's ${L1CFG[r-1].comp} gold — that is what losing pricing power looks like.`:` Along the demand curve, every notch of price costs you a few buyers; the optimum is where "earning more per sale" and "losing customers" exactly cancel out.`);
+  }
+  if(lv===2&&r<=4){
+    const{res,opt}=G.lastResult,{F}=G.lastDecision;
+    ratio=res.welfare/Math.max(1,opt.welfare);
+    rows=lrow("Village welfare",res.welfare,opt.welfare,"",false)
+        +lrow("Grain output",res.g,90,"sacks needed",res.g>90*1.2)
+        +lrow("Cloth output",res.c,12,"bolts needed",res.c>12*1.2);
+    const df=F-opt.F;
+    hint=df>3?`▲ ${df} too many in the fields — cloth runs short while grain sits rotting.`:df<-3?`▼ ${-df} too many at the looms — cloth to spare, and empty stomachs.`:`● Your allocation was close to optimal.`;
+    if(r>=2)hint+=` Note: efficiency is down to ${Math.round(EFF[r-1]*100)}% — the same allocation now yields less.`;
+    why=`This round's optimum: about <b>${opt.F} farming and ${100-opt.F} weaving</b> (welfare ${opt.welfare}). With demand at 90 grain and 12 cloth, the best split minimises both shortfalls at once.${r>=3?" But no allocation can recover what compulsion costs in efficiency — the problem is not the ratio, it is the system.":""}`;
+  }
+  if(lv===2&&r>=5){
+    const{res,opt}=G.lastResult,{p,T}=G.lastDecision;
+    ratio=res.welfare/Math.max(1,opt.welfare);
+    rows=lrow("Village welfare",res.welfare,opt.welfare,"",false);
+    rows+=`<div class="lrow"><div class="lrow-head"><span class="k">Grain market</span>
+      <span class="v" style="color:${Math.abs(res.sg)<3?"var(--leaf)":"var(--seal)"}">${res.sg>0?"surplus +":"shortage "}${res.sg}</span></div></div>`;
+    rows+=`<div class="lrow"><div class="lrow-head"><span class="k">Cloth market</span>
+      <span class="v" style="color:${Math.abs(res.sc)<1.5?"var(--leaf)":"var(--seal)"}">${res.sc>0?"surplus +":"shortage "}${res.sc}</span></div></div>`;
+    const dp=p-opt.p;
+    hint=dp>0.15?`▲ Cloth is priced too high — too many at the looms, too few in the fields.`:dp<-0.15?`▼ Cloth is priced too low — cloth runs short while everyone crowds into the fields.`:`● The price is near equilibrium; the market settles itself.`;
+    if(r>=7&&T<opt.T)hint+=` The neighbors' price (1.6) is below what it costs you to make it (2.4) — buying more is pure gain.`;
+    if(r>=7&&res.welfare>100)hint+=` ★ Welfare above 100: that part comes from trade, and self-sufficiency can never reach it.`;
+    why=`The best cloth price is about <b>${opt.p}</b>${r>=7?`, buying <b>${opt.T} bolts</b>`:""} (welfare ${opt.welfare}). Price is a signal: a surplus calls for a cut, a shortage for a rise. ${r>=7?"The secret of trade is comparative advantage: each side specialises in what it does best, and at the right ratio both villages end up richer.":"You set a single number, and a hundred people sorted themselves out — that is what a price does."}`;
+  }
+  if(lv===3){
+    const{st,prev,a1,a2,fair}=G.lastResult,{q}=G.lastDecision;
+    ratio=1-Math.min(1,Math.abs(q-fair)/Math.max(fair,6));
+    const drop=prev>0?Math.round((prev-G.fish)/prev*100):0;
+    const toll=G.fish<prev?Math.max(1,Math.ceil((G.fish-290)/Math.max(1,prev-G.fish))):"—";
+    rows=lrow("Fish stock",G.fish,500,"(threshold 300)",false)
+        +lrow("Your catch",st.cq,fair,"fish (sustainable share)",q>fair);
+    rows+=`<div class="lrow"><div class="lrow-head"><span class="k">Upstream villages' catch</span><span class="v">${st.c1} + ${st.c2} fish</span></div></div>`;
+    rows+=`<div class="lrow"><div class="lrow-head"><span class="k">Cumulative catch, all three</span><span class="v">${G.cumCatch.me+G.cumCatch.a+G.cumCatch.b} fish</span></div></div>`;
+    hint=G.fish<prev?`⚠ The stock fell ${drop}% this round${G.fish<380&&!G.treaty?`. At this rate it breaks the collapse threshold in about ${toll} rounds.`:"."}`:`✦ The stock has stopped falling — the treaty is working.`;
+    if(q>fair)hint+=` Your quota exceeded the sustainable share by ${q-fair} fish.`;
+    why=`Sustainable share = stock growth (about ${Math.round(growth(prev))} fish) ÷ 3 villages ≈ <b>${fair} fish</b>. Your restraint alone cannot save the river: the two villages upstream took ${st.c1+st.c2} this round. Individual rationality cannot stop a collective tragedy — there is only one way out, and that is for all three villages to stop at once (negotiation opens in round 7).`;
+  }
+  const stamp=stampFor(ratio);
+  G.ratings.push(ratio);
+  const nextLabel=r<8?"Next round":"Finish the level";
+  show(`<div class="card">
+    <div class="eyebrow">ROUND ${G.round} · REVIEW</div>
+    ${dots()}
+    <div class="ledger">${stamp}
+      <div class="ledger-title">Feedback Ledger —${LEVEL_NAMES[lv].split("·")[1]}, Round ${r}</div>
+      ${rows}
+      <div class="hintline">${hint}</div>
+      <button class="whybtn" onclick="this.nextElementSibling.classList.toggle('show')">Why wasn't this optimal?</button>
+      <div class="whybox">${why}</div>
+    </div>
+    <div class="btnrow"><button class="main" onclick="nextRound()">${nextLabel}</button>
+      <button class="ghost" onclick="restoreTo(G.level,G.round)&&screenTip()">↺ Redo this round</button></div>
+  </div>`);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.querySelectorAll(".bar-opt,.bar-you").forEach(b=>b.style.width=b.dataset.w+"%");
+  }));
+}
+
+/* ── round advance ── */
+function nextRound(){
+  const lv=G.level;
+  if(G.round>=8){
+    if(lv<3)return screenTransition(lv);
+    return screenEnding();
+  }
+  G.round++;
+  if(lv===3&&G.round===7&&!G.negoDone)return screenNegotiate();
+  if(lv===3&&G.round===8&&!G.treaty&&G.fish<300)return screenRiverCollapse();
+  screenTip();
+}
+
+/* ── level transition ── */
+function screenTransition(lv){
+  const txt=lv===1
+    ?{t:"After the Workshop",p:"Competition thinned your margins — and put cheap tools into every hand in the settlement. More people came; fields and looms spread out around the workshop.<br><br>Mira left you a parting question: <i>\"You can keep the books for one shop. What about a hundred people?\"</i>"}
+    :{t:"After the Village",p:"The market began to run itself, and the road to the neighboring village opened. But prosperity drew new neighbors — two villages upstream, drinking from the same river.<br><br>Elder Cai watched the water: <i>\"The workshop was yours. The village is ours. And this river — whose is it?\"</i>"};
+  show(`<div class="card">
+    <div class="eyebrow">INTERLUDE</div>
+    <h2 class="serif">${txt.t}</h2>
+    <p style="margin:14px 0">${txt.p}</p>
+    <div class="btnrow"><button class="main" onclick="startLevel(${lv+1})">Enter${LEVEL_NAMES[lv+1].split("·")[1]}</button></div>
+  </div>`);
+}
+
+/* ── collapse (levels 1 & 2) ── */
+function screenCollapse(title,advice){
+  G.screen="collapse";
+  show(`<div class="card crisis">
+    <div class="eyebrow">ECONOMIC COLLAPSE</div>
+    <h2 class="serif">Something Went Badly Wrong</h2>
+    <p style="margin:12px 0">${title}</p>
+    <p class="dim">${advice}</p>
+    <div class="btnrow"><button class="main" onclick="restoreTo(G.level,G.round);screenTip()">Back to the checkpoint</button>
+      ${G.round>1?`<button class="ghost" onclick="backRound()">← Previous round</button>`:""}</div>
+  </div>`);
+}
+
+/* ── level 3 · negotiation ── */
+function screenNegotiate(){
+  G.screen="nego";G.negoDone=false;
+  show(`<div class="card">
+    <div class="eyebrow">ROUND 7 · TALKS AT THE BEND</div>
+    ${dots()}
+    <div class="npc-row">
+      <div class="avatar serif">R</div>
+      <div class="bubble"><div class="npc-name">${NPCS.rena.n}</div>
+      <p>All three villages are here. Propose a per-village quota — too harsh and they walk out, too generous and the river dies anyway. You get one formal proposal. Think before you speak.</p></div>
+    </div>
+    <div class="animbox">${svgTreaty()}</div>
+    <details class="formula"><summary>Math shortcut (optional)</summary>
+      <div class="fbody"><div class="expr">Feasible range: village floor ≤ quota ≤ river ceiling</div>
+      <p class="dim">Each village's floor is about 10 fish (below that they go hungry and will certainly refuse); the river's ceiling is about 14 (3 villages × 14 ≈ current growth — above that the stock keeps falling).</p></div>
+    </details>
+    <div class="ctl"><div class="ctl-head"><span class="ctl-label">Proposal: cap per village per round</span><span class="ctl-val" id="cap-v"></span></div>
+      <input type="range" id="cap" min="6" max="24" value="15" step="1">
+      <div class="ctl-scale"><span>6</span><span>24</span></div></div>
+    <div class="btnrow">
+      <button class="main" onclick="propose()">Make the proposal</button>
+      <button class="ghost" onclick="G.negoDone=true;G.treaty=null;screenTip()">Walk away</button>
+      <button class="ghost" onclick="backRound()">← Previous round</button>
+    </div>
+  </div>`);
+  bindSlider("cap",v=>`${v} <small>fish</small>`);
+}
+function propose(){
+  const cap=+document.getElementById("cap").value;
+  G.negoDone=true;
+  const accept=cap>=10;
+  const sustainable=cap<=14;
+  let resps=`
+   <div class="resp"><div class="avatar serif">I</div><div class="say">Upstream Village I: ${accept?'<span class="ok">"...Fine. We\'ll sign."</span>':'<span class="no">"'+cap+' fish? You want us to live on air?"</span>'}</div></div>
+   <div class="resp"><div class="avatar serif">II</div><div class="say">Upstream Village II: ${accept?'<span class="ok">"So long as everyone keeps to it."</span>':'<span class="no">"No deal."</span> (walks out)'}</div></div>
+   <div class="resp"><div class="avatar serif">R</div><div class="say">Rena: ${accept?(sustainable?'<span class="ok">"That number... the river can carry it. Sign."</span>':'"Signed, yes. But I have counted — at that cap the stock is still falling."'):'"I told you. Too harsh, and they will not take it."'}</div></div>`;
+  let after;
+  if(accept){G.treaty=cap;after=`<div class="btnrow"><button class="main" onclick="screenTip()">Treaty in force · continue round 7</button></div>`}
+  else{
+    G.negoTried++;
+    after=G.negoTried<2
+      ?`<div class="btnrow"><button class="main" onclick="screenNegotiate()">Propose again (last chance)</button><button class="ghost" onclick="G.treaty=null;screenTip()">Walk away</button></div>`
+      :`<p class="dim" style="margin-top:10px">The talks have broken down. Every village is on its own again.</p><div class="btnrow"><button class="main" onclick="G.treaty=null;screenTip()">Continue round 7</button></div>`;
+  }
+  show(`<div class="card">
+    <div class="eyebrow">OUTCOME OF THE TALKS</div>
+    <p style="margin-bottom:12px">You proposed: at most <b style="color:var(--seal)">${cap} fish</b> per village per round.</p>
+    ${resps}${after}
+  </div>`);
+}
+
+/* ── level 3 · total collapse ── */
+function screenRiverCollapse(){
+  G.screen="rivercollapse";
+  let rowsHtml=G.quotaHist.map(h=>`<tr><td>${h.r}</td><td class="me">${h.me}</td><td>${h.a}</td><td>${h.b}</td><td>${h.S}</td></tr>`).join("");
+  show(`<div class="card crisis">
+    <div class="eyebrow">FISHERY COLLAPSE</div>
+    <h2 class="serif">The River Is Empty</h2>
+    <p style="margin:12px 0">The stock has fallen through the collapse threshold. At the start of round 8 all three villages haul in empty nets — <b>whatever anyone caught before this, everyone has lost.</b></p>
+    <table class="qtable"><tr><th>Round</th><th>Your quota</th><th>Village I</th><th>Village II</th><th>Stock at end</th></tr>${rowsHtml}</table>
+    <p class="dim">Look at the table. Taken on its own, every decision in every row was "rational". Put together, they are this empty river. That is how bad a Nash equilibrium can be.</p>
+    <div class="btnrow"><button class="main" onclick="restoreTo(3,7);G.negoDone=false;G.negoTried=0;G.fish=Math.max(G.fish,320);screenNegotiate()">Back to the bend · reopen talks</button>
+      <button class="ghost" onclick="backRound()">← Back to an earlier round</button></div>
+  </div>`);
+}
+
+/* ── ending ── */
+function screenEnding(){
+  G.screen="end";
+  const avg=G.ratings.length?G.ratings.reduce((a,b)=>a+b,0)/G.ratings.length:0;
+  const grade=avg>=.85?"A":avg>=.6?"B":"C";
+  const treatyLine=G.treaty
+    ?(G.treaty<=14?`The three-village treaty (${G.treaty} fish each) turned the stock around — you found the way out of the dilemma: <b>turn a promise into an institution.</b>`
+      :`A treaty was signed (${G.treaty} fish each), but the cap was too generous and the stock is still drifting down. You have the institution; it still needs calibration.`)
+    :`With no treaty, the river came to the very edge of collapse. Individual restraint cannot save a commons — a lesson that came at no small price.`;
+  show(`<div class="card">
+    <div class="eyebrow">END OF DEMO</div>
+    <h1 class="serif" style="font-size:36px">A Civilization Begins</h1>
+    <p style="margin:12px 0">From the price of a single workshop, to the prices of a whole village, to the rules of a shared river — you have walked the three steps that matter most in economics: <b>how individuals decide, how markets coordinate, and how institutions make cooperation possible.</b></p>
+    <p style="margin:12px 0">${treatyLine}</p>
+    <div class="ledger" style="margin-top:18px">
+      <div class="stamp ${avg>=.85?"good":avg>=.6?"mid":""} serif">${grade}</div>
+      <div class="ledger-title">Founder's Record</div>
+      <div class="lrow"><div class="lrow-head"><span class="k">How close your decisions were to optimal</span><span class="v">${Math.round(avg*100)} / 100</span></div>
+      <div class="bars"><div class="bar-you" style="width:0" data-w="${Math.round(avg*100)}"></div></div></div>
+      <div class="lrow"><div class="lrow-head"><span class="k">Final vault (Level 1)</span><span class="v">${G.gold} gold</span></div></div>
+      <div class="lrow"><div class="lrow-head"><span class="k">Final fish stock (Level 3)</span><span class="v">${G.fish} / 500</span></div></div>
+    </div>
+    <p class="dim" style="margin-top:14px">Bigger challenges lie ahead: money, taxation, cycles and growth — coming in the full version.</p>
+    <div class="btnrow"><button class="main" onclick="location.reload()">Play again</button></div>
+  </div>`);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.querySelectorAll(".bar-you").forEach(b=>b.style.width=b.dataset.w+"%");
+  }));
+}
+
+screenTitle();
+</script>
+</body>
+</html>

@@ -1,12 +1,130 @@
 ---
 layout: archive
-title: "Teaching"
+title: ""
 permalink: /teaching/
-author_profile: true
+author_profile: false
 ---
+<!--
+  TEACHING PAGE — AcademicPages (Jekyll + Minimal Mistakes)
+  Shares the exact type scale / spacing of the research page (.pubs container, h2 headers,
+  .links pill buttons) so the two pages look identical.
 
-{% include base_path %}
+  Section 1: Teaching Assistant Experience — the institution (Duke University) is shown once
+    under the section title; each course is one line:
+      <course name> (<level>, <year>, for <professor>)
+    Each course has placeholder "Notes" / "Teaching Evaluation" links (href="#"). Replace the
+    "#" with a file in /files/ (leading slash, lowercase, no spaces) once you have it; delete a
+    link you don't need.
 
-{% for post in site.teaching reversed %}
-  {% include archive-single.html %}
-{% endfor %}
+  Section 2: Notes for Economists — one <article class="paper"> per note:
+      bold title  +  one-line description (what it's about / the argument)  +  a pill link.
+    Link a blog post via its permalink (/posts/...), or a PDF/slides in /files/. To add a note,
+    copy an <article> block. Keep the description to ~1-2 lines: concise but informative.
+
+  Files/PDFs go in the repo's /files/ folder; paths use a leading slash (/files/...).
+-->
+<style>
+  .pubs { max-width: 760px; margin: 0 auto; font-size: 1rem; line-height: 1.55; }
+  .pubs h2 {
+    font-size: 1.4rem; letter-spacing: 0.02em;
+    color: #1a1a1a; font-weight: 700; margin: 2.6rem 0 1rem;
+    padding-bottom: 0.4rem; border-bottom: 1px solid #ececec;
+  }
+  .pubs h2:first-of-type { margin-top: 0.5rem; }
+
+  .paper { padding: 0.6rem 0; }
+
+  /* 课程与文章条目:整体缩进,标题前挂一个圆点 */
+  .paper.course,
+  .paper.note { padding-left: 2ch; position: relative; }
+  .paper.course .title::before,
+  .paper.note .title::before {
+    content: "\2022";
+    position: absolute;
+    left: 0.35ch;
+    color: #888;
+    font-weight: 400;
+  }
+
+  .paper .title {
+    font-weight: 650; font-size: 0.95rem; line-height: 1.35; color: #1a1a1a; margin: 0;
+  }
+  .paper .title .meta { font-weight: 400; font-size: 0.85rem; color: #666; }
+
+  .note-desc { color: #555; font-size: 0.92rem; line-height: 1.55; margin: 0.25rem 0 0; }
+
+  .course-meta { color: #555; font-size: 0.85rem; line-height: 1.5; margin: 0.2rem 0 0; }
+
+  .links { margin-top: 0.45rem; display: flex; flex-wrap: wrap; gap: 0.2rem 1.1rem; }
+  .links a {
+    font-size: 0.85rem; color: #2563eb; text-decoration: underline;
+    border: 0; background: none; padding: 0; font-family: inherit;
+  }
+  .links a::before { content: "["; }
+  .links a::after  { content: "]"; }
+  .links a:hover { color: #1d4ed8; }
+
+  .venue-note { color: #333; font-weight: 500; font-size: 1.15rem; margin: -0.2rem 0 0.9rem; }
+  .venue-note.venue-next { margin-top: 1.7rem; }
+  .section-note { color: #777; font-size: 0.95rem; margin: -0.35rem 0 0.7rem; }
+
+  @media (max-width: 480px) { .pubs { font-size: 0.95rem; } }
+</style>
+
+<div class="pubs">
+
+  <!-- ============ TEACHING ASSISTANT EXPERIENCE ============ -->
+  <h2>Teaching Assistant</h2>
+  <p class="venue-note">Duke University</p>
+
+  <article class="paper course">
+    <p class="title">Econometrics II <span class="meta">(PhD Core Course)</span></p>
+    <p class="course-meta">Instructors: Adam Rosen and Anna Bykhovskaya &mdash; Spring 2023</p>
+  </article>
+
+  <article class="paper course">
+    <p class="title">Econometrics I <span class="meta">(PhD Core Course)</span></p>
+    <p class="course-meta">Instructor: Matt Masten &mdash; Fall 2022</p>
+    <div class="links">
+      <a href="/files/TA_Evaluation_Econ_703_Fall2022.pdf" target="_blank" rel="noopener noreferrer">Teaching Evaluation</a>
+    </div>
+  </article>
+
+  <article class="paper course">
+    <p class="title">Applied Econometrics <span class="meta">(Master Course)</span></p>
+    <p class="course-meta">Instructor: Modibo Sidibe &mdash; Spring 2021</p>
+  </article>
+
+  <p class="venue-note venue-next">Peking University</p>
+
+  <article class="paper course">
+    <p class="title">Economic History of China <span class="meta">(Undergraduate Course)</span></p>
+    <p class="course-meta">Instructor: Yu Hao &mdash; Spring 2019</p>
+  </article>
+
+  <article class="paper course">
+    <p class="title">Introduction to Econometrics <span class="meta">(Undergraduate Course)</span></p>
+    <p class="course-meta">Instructor: Ming Gao &mdash; Fall 2018</p>
+  </article>
+
+  <!-- ============ MISCELLANEOUS ABOUT TEACHING ============ -->
+  <h2>Miscellaneous about Teaching</h2>
+  <p class="section-note">Notes, reflections, and projects on teaching and learning economics.</p>
+
+  <article class="paper note">
+    <p class="title">Thoughts on Designing the Econ PhD First-Year Class</p>
+    <p class="note-desc">A reflection on the first-year PhD sequence &mdash; students understand economics more deeply when instructors connect theory, models, data, research, and policy within a single class. I offer a few examples: linking the moral hazard model to health IO research (Microeconomics), causal inference to applied-micro work (Econometrics), and macro theory to data and identification (Macroeconomics).</p>
+    <div class="links">
+      <a href="/posts/2025/11/blog-post-1/">Read note</a>
+    </div>
+  </article>
+
+  <article class="paper note">
+    <p class="title">A Real Game to Learn Econ 101 &mdash; EconQuest</p>
+    <p class="note-desc">Inspired by <em>Civilization VI</em> and by the paper &ldquo;The Fractured-Land Hypothesis&rdquo; (Fern&aacute;ndez-Villaverde et al., 2023), I see strategy games as a natural tool for learning economics &mdash; both rest on maximizing utility, wealth, or the odds of winning. In my spare time, I enjoy building <em>EconQuest</em> (with the help of Claude), a video game that aims to motivate and help high-school and first-year undergraduate students learn economics.</p>
+    <div class="links">
+      <a href="/files/EconQuest_Demo.html" target="_blank" rel="noopener noreferrer">Demo</a>
+    </div>
+  </article>
+
+</div>

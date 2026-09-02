@@ -11,3 +11,5 @@ Gemfile.lock
 # Ingore files created by npm
 node_modules
 package-lock.json
+# 内部工作笔记,不上传
+teaching.md

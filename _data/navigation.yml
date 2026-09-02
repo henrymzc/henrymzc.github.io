@@ -5,6 +5,9 @@
 # prevent it from being included in the site.
 
 main:
+  - title: "Home"
+    url: /
+
   - title: "Research"
     url: /research/
 
@@ -17,11 +20,11 @@ main:
 #  - title: "Portfolio"
 #    url: /portfolio/
         
-  - title: "Blog Posts"
-    url: /blog/
+#  - title: "Blog Posts"
+#    url: /blog/
     
   - title: "CV"
     url: "https://www.dropbox.com/scl/fi/om9o0j7rpzizp2bpdj4sg/CV_Zhangchi_Ma.pdf?rlkey=o4jt9rio7fkbv85me1jibekpg&st=yuc0tcwf&dl=0"
 
-  - title: "Guide"
-    url: /markdown/
+#  - title: "Guide"
+#    url: /markdown/

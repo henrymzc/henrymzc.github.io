@@ -21,7 +21,7 @@
   }
 
   @include breakpoint($large) {
-    @include span(2 of 12);
+    @include span(3 of 12);  // 原 2/12,加宽左栏
     opacity: 1;
     -webkit-transition: opacity 0.2s ease-in-out;
             transition: opacity 0.2s ease-in-out;
@@ -47,8 +47,13 @@
 
   p, li {
     font-family: $sans-serif;
-    font-size: $type-size-6;
+    font-size: 0.875em;  // 比正文略小
     line-height: 1.5;
+  }
+
+  // 左栏内容整体居中
+  @include breakpoint($large) {
+    text-align: center;
   }
 
   img {
@@ -90,13 +95,9 @@
   }
 
   img {
-    max-width: 175px;
-    border-radius: 50%;
-
-    @include breakpoint($large) {
-      padding: 5px;
-      border: 1px solid $border-color;
-    }
+    max-width: 300px;  // 与左栏同宽(原 175px → 250px → 300px)
+    border-radius: 0;  // 方形头像(原为 50% 圆形/椭圆)
+    // 原有 padding: 5px + 1px 边框已移除
   }
 }
 
@@ -125,7 +126,7 @@
 }
 .sidebar .author__name {
   font-family: $sans-serif;
-  font-size: $type-size-5;
+  font-size: 1.1em;  // 略大于正文,小于此前的 1.25em
 }
 
 .sidebar .author__desktop {

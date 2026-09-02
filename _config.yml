@@ -8,27 +8,27 @@
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "ZZZZZ"
+title                    : "Zhangchi Ma"
 title_separator          : "-"
-name                     : &name "ZZZZ"
+name                     : &name "Zhangchi Ma"
 description              : &description "personal description"
 url                      : https://henrymzc.github.io # the base hostname & protocol for your site e.g. "https://[your GitHub username].github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "academicpages/academicpages.github.io"
+repository               : "henrymzc/henrymzc.github.io"
 
 # Site Author - The following control what appear as part of the author content on the side bar.
 #               If a field is blank the icon and link will not appear, otherwise it will be shown.
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "profile.png"
-  name             : "ZZZZZZZZZ"
+  avatar           : "/files/self_portrait.jpg"
+  name             : "Zhangchi Ma"
   pronouns         : # example: "she/her"  
   bio              : "PhD Candidate in Economics"
-  location         : "Durham"
+  location         : # removed (was "Durham")
   employer         : "Duke University"
   uri              : # URL
-  email            : "zm59@duke.edu" 
+  email            : "zhangchi.ma@duke.edu" 
 
   # Academic websites
   arxiv            : # URL - Update with the correct link to your profile
@@ -44,7 +44,7 @@ author:
   bitbucket        : # Username - Update with your username on the site
   codepen          : # Username
   dribbble         : # Username
-  github           : "academicpages"
+  github           : "henrymzc"
   kaggle           : # Username  
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
@@ -58,7 +58,7 @@ author:
   keybase          : # Username
   instagram        : # Username
   lastfm           : # Username
-  linkedin         : # Username
+  linkedin         : "zhangchi-ma-b8841b35a"
   mastodon         : # URL
   medium           : # URL
   pinterest        : # Username
@@ -181,6 +181,7 @@ exclude:
   - package.json*
   - Rakefile
   - README
+  - teaching.md
   - tmp
   - vendor
 keep_files:
@@ -234,7 +235,7 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       read_time: true
       comments: true
       share: true
@@ -245,14 +246,14 @@ defaults:
       type: pages
     values:
       layout: single
-      author_profile: true
+      author_profile: false
   # _teaching
   - scope:
       path: ""
       type: teaching
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       share: true
       comments: true
   # _publications
@@ -261,7 +262,7 @@ defaults:
       type: publications
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       share: true
       comments: true
   # _portfolio
@@ -270,7 +271,7 @@ defaults:
       type: portfolio
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       share: true
       comment: true
   # _talks
@@ -279,7 +280,7 @@ defaults:
       type: talks
     values:
       layout: talk
-      author_profile: true
+      author_profile: false
       share: true
 
 

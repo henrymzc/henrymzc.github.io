@@ -203,7 +203,12 @@
   }
 
   .visible-links {
-    display: table;
+    display: table;   // 必须保持 table:greedy-nav 的 JS 用 $vlinks.width()
+                      // 取内容宽度来判断是否溢出,flex 会让它恒等于容器宽度
+
+    @include breakpoint($large) {
+      margin-left: auto;   // 菜单整体靠右
+    }
 
     li {
       display: table-cell;
@@ -212,6 +217,11 @@
       &:first-child {
         font-weight: bold;
         text-wrap: wrap;
+
+        @include breakpoint($large) {
+          position: absolute;   // 站点标题脱离表格流,固定在左端
+          left: 0;
+        }
 
         a {
           margin-left: 0;

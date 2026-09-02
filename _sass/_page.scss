@@ -18,9 +18,9 @@
 
 .page {
   @include breakpoint($large) {
-    @include span(10 of 12 last);
-    @include prefix(0.5 of 12);
-    @include suffix(2 of 12);
+    @include span(9 of 12 last);   // 原 10/12,给左栏让出空间
+    @include prefix(1.5 of 12);    // 再加大栏间距(0.5 → 1 → 1.5)
+    @include suffix(0.5 of 12);    // 大幅收窄右侧留白,把宽度让给正文
   }
 
   .page__inner-wrap {
