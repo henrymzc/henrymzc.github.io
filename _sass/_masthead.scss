@@ -56,3 +56,17 @@
     font-weight: 700;
   }
 }
+
+/* Site title (name, top left): serif wordmark, matching the page title and the
+   homepage intro, which both use Times New Roman. The .masthead prefix is needed
+   to outrank `.greedy-nav a` in _navigation.scss, which sets the gray link color. */
+.masthead .masthead__menu-item--lg a {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.01em;
+  color: #1a1a1a;
+
+  &:hover {
+    color: #000;
+  }
+}
