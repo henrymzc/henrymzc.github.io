@@ -53,7 +53,7 @@ redirect_from:
 
 <p>Before starting my Ph.D., I received my M.A. in Economics from Duke University and B.A. in Economics from Peking University, China.</p>
 
-<p><strong>I am on the 2026-2027 job market.</strong> My CV is available <a href="https://www.dropbox.com/scl/fi/5xqauslc0tm5nvk3f9gy0/CV_Zhangchi_Ma.pdf?rlkey=w1vlmxeauwvd6njnm8eccgyoq&amp;st=kfhgyy7u&amp;dl=0" target="_blank" rel="noopener noreferrer">here</a>. You can contact me at <a href="mailto:zhangchi.ma@duke.edu">zhangchi.ma@duke.edu</a>.</p>
+<p><strong>I am on the 2026-2027 job market.</strong> My CV is available <a href="https://www.dropbox.com/scl/fi/i51rkkgvloeglcbob5pm9/CV_Zhangchi_Ma.pdf?rlkey=3djnsq0jjo8nr4wwngyuq2nvz&amp;st=nz0a4voz&amp;dl=0" target="_blank" rel="noopener noreferrer">here</a>. You can contact me at <a href="mailto:zhangchi.ma@duke.edu">zhangchi.ma@duke.edu</a>.</p>
 
 <p>Research Fields:<br>
 <strong>Primary:</strong> Labor Economics, Economics of Education<br>
