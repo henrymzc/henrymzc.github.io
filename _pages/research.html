@@ -51,6 +51,12 @@ author_profile: false
     font-weight: 650; font-size: 1.06rem; line-height: 1.35; color: #1a1a1a; margin: 0 0 0.25rem;
   }
   .paper .authors { color: #444; font-size: 0.92rem; margin: 0 0 0.15rem; }
+  .paper .authors a {
+    color: inherit; text-decoration: none;
+    border-bottom: 1px solid #d9dee6;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .paper .authors a:hover { color: #2563eb; border-bottom-color: #9dbcf5; }
   .paper .authors .me { font-weight: 600; }
   .paper .venue  { color: #666; font-style: italic; font-size: 0.95rem; margin: 0.15rem 0 0; }
 
@@ -86,6 +92,16 @@ author_profile: false
   }
   .links a:hover, .abstract-toggle:hover { background: #f0f5ff; }
 
+  /* Status pill for papers whose draft is not circulating yet. Deliberately
+     borderless and gray so it never reads as a clickable button. */
+  .draft-soon {
+    display: inline-flex; align-items: center;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; white-space: nowrap;
+    padding: 0.14rem 0.5rem; border-radius: 4px;
+    background: #f1f2f4; color: #767d88;
+  }
+
   .abstract {
     display: none; margin-top: 0.7rem; padding: 0.8rem 1rem;
     background: #fafafa; border-left: 3px solid #d5ddec; border-radius: 0 6px 6px 0;
@@ -113,19 +129,24 @@ author_profile: false
       </div>
       -->
       <div class="links">
+        <span class="draft-soon">Draft Coming Soon</span>
+        <!--
         <a href="https://www.dropbox.com/scl/fi/34kf0eju4wo2mkulo9384/MW_Visa.pdf?rlkey=5ih9gvfnyb7hz9bmugti8flc0&st=7h97flgf&dl=0"
          target="_blank"
          rel="noopener noreferrer">
          Manuscript
         </a>
+        -->
       </div>
       <p class="abstract open">
         We study how tightening post-study work visa policy jointly shapes international students' decisions of where to study and where to work. We leverage the 2012 UK visa reform, which abolished a two-year unconditional post-study work visa, to quantify how sensitive international master's students' education choices are to labor-market access in the destination country. Using a novel longitudinal panel of LinkedIn profiles, we first find that the policy brought large unintended hiring frictions in the high-skilled sector. Applying a difference-in-differences design, we further identify a significant decline in UK master's enrollment among Indian students. To interpret this response and separate its channels, we then develop a two-stage dynamic model of education and post-graduation work choices. The model attributes over one-third of the loss in high-skilled labor to the indirect deterrence effect on the education margin, a share that is even larger for STEM majors. We further find that a one-percent loss in skilled labor positions is associated with a 0.7% loss of students for STEM and a 0.5% loss for non-STEM. Our results highlight that a reform targeting low-skilled employment can create negative spillovers to high-skilled hiring, and quantify the cost of shrinking employment opportunities for education exports.
       </p>
     </div>
+    <!--
     <div class="paper-fig">
       <img src="/files/fig_jmp.png" alt="Key figure from the job market paper">
     </div>
+    -->
    </div>
   </article>
 
@@ -136,7 +157,7 @@ author_profile: false
    <div class="paper-row">
     <div class="paper-main">
       <p class="title">Bail Decision and Racial Discrimination</p>
-      <p class="authors">with Bocar A. Ba, Xavier D'Haultfœuille, and Arnaud Maurel</p>
+      <p class="authors">with <a href="https://sites.google.com/view/bocarba/" target="_blank" rel="noopener noreferrer">Bocar A. Ba</a>, <a href="https://faculty.crest.fr/xdhaultfoeuille/" target="_blank" rel="noopener noreferrer">Xavier D'Haultfœuille</a>, and <a href="https://www.amaurel.net/" target="_blank" rel="noopener noreferrer">Arnaud Maurel</a></p>
       <!--
       <div class="tags">
         <span class="tag discrimination">Discrimination</span>
@@ -144,18 +165,23 @@ author_profile: false
       </div>
       -->
       <div class="links">
+        <span class="draft-soon">Draft Coming Soon</span>
         <button class="abstract-toggle" onclick="toggleAbs(this)">Abstract</button>
+        <!--
         <a href="https://www.dropbox.com/scl/fi/8gnh8gecxp4vk8k5j26fm/BDMM_Judge.pdf?rlkey=dob165r84g6z7jyof6ya1eq75&amp;st=iupywz7i&amp;dl=0"
          target="_blank"
          rel="noopener noreferrer">
          Manuscript
         </a>
+        -->
       </div>
       <p class="abstract">This paper investigates the determinants of bail decisions. We focus on the determinants of bail amounts set by the judges, a dimension that has not received much attention in the literature. To do so, we specify a structural model of the optimal bail amount, in which judges set the bail amount that minimizes the welfare cost of releasing the defendant. Our model allows for multiple dimensions of defendant-level unobserved heterogeneity, some being private information to the defendant and some being observed by the judge but not by econometricians. We establish constructive identification of the model parameters, including the welfare weights assigned by the judges to different groups of defendants, and derive a simple estimation procedure. We estimate our model using data from Chicago, focusing on whether the observed bail amounts are consistent with racial bias.</p>
     </div>
+    <!--
     <div class="paper-fig">
       <img src="/files/fig_bail.png" alt="Figure placeholder for Bail Decision and Racial Discrimination">
     </div>
+    -->
    </div>
   </article>
 
@@ -163,7 +189,7 @@ author_profile: false
    <div class="paper-row">
     <div class="paper-main">
       <p class="title">Perceived Discrimination and Job Search among First- and Second-Generation Americans</p>
-      <p class="authors">with Arnaud Maurel, Angelino Viceisza, and Daniel Y. Xu</p>
+      <p class="authors">with <a href="https://www.amaurel.net/" target="_blank" rel="noopener noreferrer">Arnaud Maurel</a>, <a href="https://www.angelinoviceisza.com/" target="_blank" rel="noopener noreferrer">Angelino Viceisza</a>, and <a href="https://www.danielyixu.com/" target="_blank" rel="noopener noreferrer">Daniel Y. Xu</a></p>
       <!--
       <div class="tags">
         <span class="tag immigration">Immigration</span>
@@ -172,18 +198,23 @@ author_profile: false
       </div>
       -->
       <div class="links">
+        <span class="draft-soon">Draft Coming Soon</span>
         <button class="abstract-toggle" onclick="toggleAbs(this)">Abstract</button>
+        <!--
         <a href="https://www.dropbox.com/scl/fi/tejocmw9ixcp5glx2eqhc/MMVX_Immigrant_Belief.pdf?rlkey=0826att3kiu51nypee73giuf9&amp;st=810we88h&amp;dl=0"
          target="_blank"
          rel="noopener noreferrer">
          Manuscript
         </a>
+        -->
       </div>
       <p class="abstract">This paper investigates the relationship between perceived discrimination and job search behavior among first- and second-generation Americans. We elicit beliefs regarding two distinct domains of discrimination: the "current workplace" and the "job search process". We also conduct an information intervention experiment to see if light-touch population-level information would shift idiosyncratic beliefs and job search behavior. We first document that immigrants perceive substantial disparities between themselves and a counterfactual native in both domains. In addition, immigrants overestimate the native–immigrant earnings gap in their occupation. Providing population-level earnings statistics successfully shifts posterior beliefs and reduces over-pessimism among treated participants in both domains. In a five-month follow-up, we find that higher perceived discrimination in both domains predicts increased search probabilities and efforts. Using initial population belief errors and treatment assignment as instruments, we find that a one-standard-deviation increase in perceived discrimination raises the probability of preparatory job search by 33.5 percentage points. These results suggest that immigrants respond to perceived unfairness in their current work or in the job search process by intensifying their search effort, rather than becoming discouraged. Furthermore, providing accurate market information might decrease search intensity.</p>
     </div>
+    <!--
     <div class="paper-fig">
       <img src="/files/fig_immigrant.png" alt="Figure placeholder for Perceived Discrimination and Job Search">
     </div>
+    -->
    </div>
   </article>
 
@@ -200,18 +231,23 @@ author_profile: false
       </div>
       -->
       <div class="links">
+        <span class="draft-soon">Draft Coming Soon</span>
         <button class="abstract-toggle" onclick="toggleAbs(this)">Abstract</button>
+        <!--
         <a href="https://www.dropbox.com/scl/fi/uqi923dfv5gfnaca3rd4x/BM_AI_H1B.pdf?rlkey=84kl78kgtkv58ip304op8xcgt&amp;st=aq2upird&amp;dl=0"
          target="_blank"
          rel="noopener noreferrer">
          Manuscript
         </a>
+        -->
       </div>
       <p class="abstract">Abstract coming soon.</p>
     </div>
+    <!--
     <div class="paper-fig">
       <img src="/files/fig_ai_h1b.png" alt="Figure placeholder for AI and Labor Market">
     </div>
+    -->
    </div>
   </article>
 
@@ -236,7 +272,7 @@ author_profile: false
       <p class="abstract">Access to higher education significantly influences social equality and intergenerational mobility, which is directly governed by the regional college admission quota system in China. The Chinese government initiated the "Cooperative Plan of College Enrollment in the Mid-western Province" (CPCE) in 2008, mandating some colleges in provinces with rich education resources to allocate admission quotas to Mid-western provinces. Using the Difference-in-Difference strategy, we find that while the policy led to lower entrance test scores for students from recipient provinces, these individuals did not exhibit inferior academic performance compared to their counterparts enrolled before the policy. Moreover, the policy induced students with stronger desire to work in metropolitan labor markets post-graduation to enroll in colleges located in eastern provinces, resulting in more Mid-western students working in China's top-four cities.</p>
     </div>
     <div class="paper-fig">
-      <img src="/files/fig_college.png" alt="Figure placeholder for College Accessibility and Quota Relocation">
+      <img src="/files/fig_college.png" alt="Treatment effects on job location choice">
     </div>
    </div>
   </article>
@@ -245,7 +281,7 @@ author_profile: false
    <div class="paper-row">
     <div class="paper-main">
       <p class="title">Disaster under control: droughts, locust outbreaks, and state capacity in premodern China, 1644-1911</p>
-      <p class="authors"> with Yu Hao</p>
+      <p class="authors"> with <a href="https://econ.pku.edu.cn/english/faculty/fulltimefaculty/dsfdscgghhj_20211027164618909168/50107jjxy357936.htm" target="_blank" rel="noopener noreferrer">Yu Hao</a></p>
       <p class="venue">Undergraduate Thesis, 2019</p>
       <!--
       <div class="tags">
@@ -265,7 +301,7 @@ author_profile: false
       <p class="abstract">Locust outbreaks, which are normally caused by drought, pose a major threat to agrarian societies. Nonetheless, state intervention could effectively mitigate the impacts of droughts on locusts by coordinating and enforcing antilocust actions. Based on a provincial panel dataset for Qing China (1644-1911), we find locust outbreaks to be positively related to droughts in current and previous years. A within-province centralization reform imposed in the 1720s mitigated the impacts of drought on locust outbreaks in current and previous years. A further investigation shows that the mitigation effect is nonmonotonic with the degree of centralization, suggesting that both central coordination and local information were important. In addition, the reform enhanced bureaucratic control over local officials in times of crisis, leading to more effective locust control.</p>
     </div>
     <div class="paper-fig">
-      <img src="/files/fig_locust.png" alt="Figure placeholder for Disaster under Control">
+      <img src="/files/fig_locust.png" alt="Drought and locust outbreak series, Qing China">
     </div>
    </div>
   </article>
