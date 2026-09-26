@@ -21,7 +21,7 @@ repository               : "henrymzc/henrymzc.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "/files/png_1_small.jpg"
+  avatar           : "/files/headshot.jpg"
   name             : "Zhangchi Ma"
   pronouns         : # example: "she/her"  
   bio              : "PhD Candidate in Economics"
