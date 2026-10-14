@@ -55,7 +55,7 @@ redirect_from:
 
 <p><strong>I am on the 2026-2027 job market.</strong> My CV is available <a href="https://www.dropbox.com/scl/fi/i51rkkgvloeglcbob5pm9/CV_Zhangchi_Ma.pdf?rlkey=3djnsq0jjo8nr4wwngyuq2nvz&amp;st=nz0a4voz&amp;dl=0" target="_blank" rel="noopener noreferrer">here</a>. You can contact me at <a href="mailto:zhangchi.ma@duke.edu">zhangchi.ma@duke.edu</a>.</p>
 
-<p>Research Fields:<br>
+<p><strong>Research Fields:</strong><br>
 <strong>Primary:</strong> Labor Economics, Economics of Education<br>
 <strong>Secondary:</strong> Structural Econometrics, Economics of AI</p>
 
