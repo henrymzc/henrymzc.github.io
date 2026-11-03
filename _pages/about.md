@@ -43,13 +43,27 @@ redirect_from:
   .home-intro p:last-child { margin-bottom: 0; }
   .home-intro a { color: #2563eb; text-decoration: none; border-bottom: 1px solid #dbe4f5; }
   .home-intro a:hover { background: #f0f5ff; }
+  /* References: two columns, one column on narrow screens */
+  .home-refs {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    justify-content: space-between;
+    gap: 1.1rem 1.5rem;
+    max-width: 32rem;
+    margin: 0.3rem 0 0;
+    font-size: 0.93em;
+    line-height: 1.45;
+  }
+  .home-refs .ref-head { white-space: nowrap; }
+  .home-refs .ref-name { font-weight: bold; }
+  @media (max-width: 600px) { .home-refs { grid-template-columns: 1fr; } }
 </style>
 
 <div class="home-intro">
 
 <p>Welcome to my website!</p>
 
-<p>I am a Ph.D. candidate in economics at Duke University. My research interests are in labor economics and the economics of education. My current research focuses on international students and high-skill immigrants.</p>
+<p>I am a Ph.D. candidate in economics at Duke University. My research interests are in labor economics, the economics of education, and applied econometrics. My current research focuses on international students and high-skill immigrants.</p>
 
 <p>Before starting my Ph.D., I received my M.A. in Economics from Duke University and B.A. in Economics from Peking University, China.</p>
 
@@ -58,5 +72,34 @@ redirect_from:
 <p><strong>Research Fields:</strong><br>
 <strong>Primary:</strong> Labor Economics, Economics of Education<br>
 <strong>Secondary:</strong> Structural Econometrics, Economics of AI</p>
+
+<p><strong>References:</strong></p>
+
+<div class="home-refs">
+  <div>
+    <span class="ref-head"><span class="ref-name">Arnaud Maurel</span> (Co-Chair)</span><br>
+    Professor of Economics<br>
+    Duke University<br>
+    <a href="mailto:arnaud.maurel@duke.edu">arnaud.maurel@duke.edu</a>
+  </div>
+  <div>
+    <span class="ref-head"><span class="ref-name">Peter Arcidiacono</span> (Co-Chair)</span><br>
+    Professor of Economics<br>
+    Johns Hopkins University<br>
+    <a href="mailto:parcidi1@jh.edu">parcidi1@jh.edu</a>
+  </div>
+  <div>
+    <span class="ref-head"><span class="ref-name">Xavier D'Haultfœuille</span></span><br>
+    Professor of Economics<br>
+    CREST-ENSAE<br>
+    <a href="mailto:xavier.dhaultfoeuille@ensae.fr">xavier.dhaultfoeuille@ensae.fr</a>
+  </div>
+  <div>
+    <span class="ref-head"><span class="ref-name">Matt Masten</span></span><br>
+    Associate Professor of Economics<br>
+    Duke University<br>
+    <a href="mailto:matt.masten@duke.edu">matt.masten@duke.edu</a>
+  </div>
+</div>
 
 </div>
